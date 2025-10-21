@@ -75,8 +75,13 @@ Return ONLY the JSON array, no additional text or formatting.`;
       text = response.text();
     } catch (apiError: any) {
       console.error('Gemini API error:', apiError);
+      const errorMessage = apiError?.message || apiError?.toString() || 'Unknown Gemini API error';
       return NextResponse.json(
-        { error: 'Failed to generate ideas. Please try again.' },
+        {
+          error: 'Failed to generate ideas from AI',
+          details: errorMessage,
+          stage: 'gemini_api_call'
+        },
         { status: 500 }
       );
     }
@@ -87,10 +92,15 @@ Return ONLY the JSON array, no additional text or formatting.`;
       // Remove markdown code blocks if present
       const cleanedText = text.replace(/```json\n?/g, '').replace(/```\n?/g, '').trim();
       ideas = JSON.parse(cleanedText);
-    } catch (parseError) {
+    } catch (parseError: any) {
       console.error('Failed to parse Gemini response:', text);
       return NextResponse.json(
-        { error: 'Failed to parse AI response' },
+        {
+          error: 'Failed to parse AI response',
+          details: parseError.message,
+          stage: 'json_parse',
+          rawResponse: text?.substring(0, 500) // First 500 chars for debugging
+        },
         { status: 500 }
       );
     }
@@ -98,7 +108,12 @@ Return ONLY the JSON array, no additional text or formatting.`;
     // Validate ideas array
     if (!Array.isArray(ideas) || ideas.length === 0) {
       return NextResponse.json(
-        { error: 'Invalid response from AI' },
+        {
+          error: 'Invalid response from AI',
+          details: 'Response is not an array or is empty',
+          stage: 'validation',
+          receivedType: typeof ideas
+        },
         { status: 500 }
       );
     }
@@ -125,7 +140,11 @@ Return ONLY the JSON array, no additional text or formatting.`;
     if (dbError) {
       console.error('Database error:', dbError);
       return NextResponse.json(
-        { error: 'Failed to store ideas' },
+        {
+          error: 'Failed to store ideas',
+          details: dbError.message,
+          stage: 'database_insert'
+        },
         { status: 500 }
       );
     }
