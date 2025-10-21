@@ -6,6 +6,7 @@ import { X, Heart, Info } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Idea } from '@/types';
+import toast from 'react-hot-toast';
 
 interface SwipeableCardsProps {
   ideas: Idea[];
@@ -17,6 +18,7 @@ export function SwipeableCards({ ideas, onSwipeComplete, onViewDetails }: Swipea
   const [currentIndex, setCurrentIndex] = useState(0);
   const [savedIdeas, setSavedIdeas] = useState<Idea[]>([]);
   const [exitX, setExitX] = useState(0);
+  const [swipeDirection, setSwipeDirection] = useState<'left' | 'right' | null>(null);
 
   const currentIdea = ideas[currentIndex];
   const x = useMotionValue(0);
@@ -28,32 +30,42 @@ export function SwipeableCards({ ideas, onSwipeComplete, onViewDetails }: Swipea
 
     if (Math.abs(info.offset.x) > threshold) {
       // Swiped
-      const direction = info.offset.x > 0 ? 1 : -1;
-      setExitX(direction > 0 ? 300 : -300);
+      const direction = info.offset.x > 0 ? 'right' : 'left';
+      setSwipeDirection(direction);
+      setExitX(direction === 'right' ? 300 : -300);
 
-      // If swiped right, save the idea
-      if (direction > 0) {
+      // Show toast and handle save
+      if (direction === 'right') {
         setSavedIdeas(prev => [...prev, currentIdea]);
+        toast.success('Idea saved!', { icon: '❤️' });
+      } else {
+        toast('Idea skipped', { icon: '👋' });
       }
 
       // Move to next card
       setTimeout(() => {
         if (currentIndex === ideas.length - 1) {
           // All cards swiped
-          onSwipeComplete(direction > 0 ? [...savedIdeas, currentIdea] : savedIdeas);
+          onSwipeComplete(direction === 'right' ? [...savedIdeas, currentIdea] : savedIdeas);
         } else {
           setCurrentIndex(prev => prev + 1);
           setExitX(0);
+          setSwipeDirection(null);
         }
       }, 200);
     }
   };
 
   const handleSwipe = (direction: 'left' | 'right') => {
+    setSwipeDirection(direction);
     setExitX(direction === 'right' ? 300 : -300);
 
+    // Show toast and handle save
     if (direction === 'right') {
       setSavedIdeas(prev => [...prev, currentIdea]);
+      toast.success('Idea saved!', { icon: '❤️' });
+    } else {
+      toast('Idea skipped', { icon: '👋' });
     }
 
     setTimeout(() => {
@@ -62,6 +74,7 @@ export function SwipeableCards({ ideas, onSwipeComplete, onViewDetails }: Swipea
       } else {
         setCurrentIndex(prev => prev + 1);
         setExitX(0);
+        setSwipeDirection(null);
       }
     }, 200);
   };
@@ -161,18 +174,26 @@ export function SwipeableCards({ ideas, onSwipeComplete, onViewDetails }: Swipea
         <Button
           size="icon"
           variant="outline"
-          className="h-16 w-16 rounded-full border-2 border-red-500 hover:bg-red-500/10 shadow-uber"
+          className={`h-16 w-16 rounded-full border-2 shadow-uber transition-all duration-200 ${
+            swipeDirection === 'left'
+              ? 'border-red-500 bg-red-500 scale-110'
+              : 'border-red-500 hover:bg-red-500/10'
+          }`}
           onClick={() => handleSwipe('left')}
         >
-          <X className="h-8 w-8 text-red-500" />
+          <X className={`h-8 w-8 ${swipeDirection === 'left' ? 'text-white' : 'text-red-500'}`} />
         </Button>
         <Button
           size="icon"
           variant="outline"
-          className="h-16 w-16 rounded-full border-2 border-green-500 hover:bg-green-500/10 shadow-uber"
+          className={`h-16 w-16 rounded-full border-2 shadow-uber transition-all duration-200 ${
+            swipeDirection === 'right'
+              ? 'border-green-500 bg-green-500 scale-110'
+              : 'border-green-500 hover:bg-green-500/10'
+          }`}
           onClick={() => handleSwipe('right')}
         >
-          <Heart className="h-8 w-8 text-green-500" />
+          <Heart className={`h-8 w-8 ${swipeDirection === 'right' ? 'text-white' : 'text-green-500'}`} />
         </Button>
       </div>
     </div>

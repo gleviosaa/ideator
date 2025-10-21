@@ -27,8 +27,7 @@ export interface SavedIdea {
 
 export interface CategoryFilters {
   technology?: string;
-  complexity?: string;
-  timeToBuild?: string;
+  context?: string;
   monetization?: string;
   targetAudience?: string;
 }
@@ -44,18 +43,17 @@ export const CATEGORIES = {
     'AR/VR',
     'Game Development',
   ],
-  complexity: [
-    'Beginner',
-    'Intermediate',
-    'Advanced',
-    'Expert',
-  ],
-  timeToBuild: [
-    'Weekend (1-2 days)',
-    '1 Week',
-    '2-4 Weeks',
-    '1-3 Months',
-    '3+ Months',
+  context: [
+    'Health & Fitness',
+    'Technology',
+    'Games',
+    'Education',
+    'Finance',
+    'Social',
+    'Productivity',
+    'E-commerce',
+    'Entertainment',
+    'Travel',
   ],
   monetization: [
     'Free/Open Source',

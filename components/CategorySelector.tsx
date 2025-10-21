@@ -72,37 +72,19 @@ export function CategorySelector({ onSubmit, loading }: CategorySelectorProps) {
               </div>
             </div>
 
-            {/* Complexity */}
+            {/* Context */}
             <div>
-              <h3 className="font-medium mb-3">Complexity Level</h3>
+              <h3 className="font-medium mb-3">Context/Category</h3>
               <div className="flex flex-wrap gap-2">
-                {CATEGORIES.complexity.map((level) => (
+                {CATEGORIES.context.map((ctx) => (
                   <Button
-                    key={level}
-                    variant={filters.complexity === level ? 'default' : 'outline'}
+                    key={ctx}
+                    variant={filters.context === ctx ? 'default' : 'outline'}
                     size="sm"
-                    onClick={() => handleCategorySelect('complexity', level)}
+                    onClick={() => handleCategorySelect('context', ctx)}
                     disabled={loading}
                   >
-                    {level}
-                  </Button>
-                ))}
-              </div>
-            </div>
-
-            {/* Time to Build */}
-            <div>
-              <h3 className="font-medium mb-3">Time to Build</h3>
-              <div className="flex flex-wrap gap-2">
-                {CATEGORIES.timeToBuild.map((time) => (
-                  <Button
-                    key={time}
-                    variant={filters.timeToBuild === time ? 'default' : 'outline'}
-                    size="sm"
-                    onClick={() => handleCategorySelect('timeToBuild', time)}
-                    disabled={loading}
-                  >
-                    {time}
+                    {ctx}
                   </Button>
                 ))}
               </div>
