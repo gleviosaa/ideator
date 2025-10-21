@@ -6,6 +6,15 @@ const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || '');
 
 export async function POST(request: NextRequest) {
   try {
+    // Check if API key is configured
+    if (!process.env.GEMINI_API_KEY) {
+      console.error('GEMINI_API_KEY is not configured');
+      return NextResponse.json(
+        { error: 'AI service not configured. Please contact support.' },
+        { status: 500 }
+      );
+    }
+
     const supabase = await createClient();
     const { data: { user } } = await supabase.auth.getUser();
 
@@ -58,10 +67,19 @@ Make sure the ideas are:
 Return ONLY the JSON array, no additional text or formatting.`;
 
     // Call Gemini API
-    const model = genAI.getGenerativeModel({ model: 'gemini-pro' });
-    const result = await model.generateContent(prompt);
-    const response = await result.response;
-    const text = response.text();
+    let text;
+    try {
+      const model = genAI.getGenerativeModel({ model: 'gemini-pro' });
+      const result = await model.generateContent(prompt);
+      const response = await result.response;
+      text = response.text();
+    } catch (apiError: any) {
+      console.error('Gemini API error:', apiError);
+      return NextResponse.json(
+        { error: 'Failed to generate ideas. Please try again.' },
+        { status: 500 }
+      );
+    }
 
     // Parse the response
     let ideas;
@@ -113,10 +131,13 @@ Return ONLY the JSON array, no additional text or formatting.`;
     }
 
     return NextResponse.json({ ideas: storedIdeas });
-  } catch (error) {
+  } catch (error: any) {
     console.error('Error generating ideas:', error);
     return NextResponse.json(
-      { error: 'Internal server error' },
+      {
+        error: 'Internal server error',
+        details: error?.message || 'Unknown error'
+      },
       { status: 500 }
     );
   }
