@@ -71,27 +71,28 @@ export function SwipeableCards({ ideas, onSwipeComplete, onViewDetails }: Swipea
   }
 
   return (
-    <div className="relative w-full max-w-md mx-auto h-[500px]">
+    <div className="flex flex-col items-center space-y-6">
       {/* Card counter */}
-      <div className="text-center mb-4 text-gray-400">
+      <div className="text-center text-gray-600 font-medium">
         {currentIndex + 1} / {ideas.length}
       </div>
 
       {/* Swipeable card */}
-      <motion.div
-        className="absolute w-full"
-        style={{
-          x,
-          rotate,
-          opacity,
-        }}
-        drag="x"
-        dragConstraints={{ left: 0, right: 0 }}
-        onDragEnd={handleDragEnd}
-        animate={{ x: exitX }}
-        transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-      >
-        <Card className="cursor-grab active:cursor-grabbing">
+      <div className="relative w-full max-w-md">
+        <motion.div
+          className="w-full"
+          style={{
+            x,
+            rotate,
+            opacity,
+          }}
+          drag="x"
+          dragConstraints={{ left: 0, right: 0 }}
+          onDragEnd={handleDragEnd}
+          animate={{ x: exitX }}
+          transition={{ type: 'spring', stiffness: 300, damping: 30 }}
+        >
+          <Card className="cursor-grab active:cursor-grabbing">
           <CardHeader>
             <CardTitle className="text-2xl">{currentIdea.title}</CardTitle>
             {currentIdea.technology && (
@@ -145,21 +146,22 @@ export function SwipeableCards({ ideas, onSwipeComplete, onViewDetails }: Swipea
             </Button>
           </CardContent>
         </Card>
-      </motion.div>
+        </motion.div>
+      </div>
 
       {/* Swipe hint on first card */}
       {currentIndex === 0 && (
-        <div className="absolute -bottom-16 left-0 right-0 text-center text-gray-500 text-sm">
+        <div className="text-center text-gray-500 text-sm px-4">
           Swipe right to save, left to skip
         </div>
       )}
 
       {/* Action buttons */}
-      <div className="absolute -bottom-20 left-0 right-0 flex justify-center gap-8 mt-6">
+      <div className="flex justify-center gap-8 pt-2">
         <Button
           size="icon"
           variant="outline"
-          className="h-16 w-16 rounded-full border-red-500 hover:bg-red-500/10"
+          className="h-16 w-16 rounded-full border-2 border-red-500 hover:bg-red-500/10 shadow-uber"
           onClick={() => handleSwipe('left')}
         >
           <X className="h-8 w-8 text-red-500" />
@@ -167,7 +169,7 @@ export function SwipeableCards({ ideas, onSwipeComplete, onViewDetails }: Swipea
         <Button
           size="icon"
           variant="outline"
-          className="h-16 w-16 rounded-full border-green-500 hover:bg-green-500/10"
+          className="h-16 w-16 rounded-full border-2 border-green-500 hover:bg-green-500/10 shadow-uber"
           onClick={() => handleSwipe('right')}
         >
           <Heart className="h-8 w-8 text-green-500" />

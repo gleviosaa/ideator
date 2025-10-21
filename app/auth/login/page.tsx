@@ -43,8 +43,8 @@ export default function LoginPage() {
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center p-4">
-      <Card className="w-full max-w-md">
+    <div className="flex min-h-screen items-center justify-center p-4 bg-gray-50">
+      <Card className="w-full max-w-md shadow-uber-lg">
         <CardHeader className="space-y-1">
           <CardTitle className="text-2xl font-bold">Login</CardTitle>
           <CardDescription>
@@ -86,9 +86,9 @@ export default function LoginPage() {
             <Button type="submit" className="w-full" disabled={loading}>
               {loading ? 'Logging in...' : 'Login'}
             </Button>
-            <p className="text-center text-sm text-gray-400">
+            <p className="text-center text-sm text-gray-600">
               Don&apos;t have an account?{' '}
-              <Link href="/auth/signup" className="text-white hover:underline">
+              <Link href="/auth/signup" className="text-black font-medium hover:underline">
                 Sign up
               </Link>
             </p>

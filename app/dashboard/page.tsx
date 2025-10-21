@@ -114,8 +114,8 @@ export default function DashboardPage() {
   return (
     <div className="min-h-screen bg-gray-50 p-4 md:p-6">
       {/* Header */}
-      <div className="max-w-5xl mx-auto mb-8">
-        <div className="flex justify-between items-center py-4">
+      <div className="max-w-5xl mx-auto mb-4">
+        <div className="flex justify-between items-center py-2">
           <h1 className="text-2xl font-bold text-black">Ideator</h1>
           <div className="flex gap-3">
             <Button
@@ -141,13 +141,13 @@ export default function DashboardPage() {
       {/* Main Content */}
       <div className="max-w-5xl mx-auto">
         {viewMode === 'search' && (
-          <div className="space-y-8">
-            <div className="text-center space-y-4 py-8">
-              <h2 className="text-3xl md:text-4xl font-bold text-black">
+          <div className="space-y-6">
+            <div className="text-center space-y-3 py-4">
+              <h2 className="text-2xl md:text-3xl font-bold text-black leading-tight">
                 What kind of app do you want to build?
               </h2>
-              <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-                Describe your idea or select categories to get personalized suggestions
+              <p className="text-base text-gray-600 max-w-2xl mx-auto">
+                Describe your idea or select categories
               </p>
             </div>
 
@@ -166,7 +166,21 @@ export default function DashboardPage() {
           </div>
         )}
 
-        {viewMode === 'swiping' && ideas.length > 0 && (
+        {loading && (
+          <div className="flex flex-col items-center justify-center py-20 space-y-6">
+            <div className="relative">
+              <div className="w-16 h-16 border-4 border-gray-200 border-t-black rounded-full animate-spin"></div>
+            </div>
+            <div className="text-center space-y-2">
+              <h3 className="text-xl font-semibold text-black">Generating Ideas...</h3>
+              <p className="text-gray-600 max-w-md">
+                Our AI is crafting personalized app ideas just for you. This may take a few moments.
+              </p>
+            </div>
+          </div>
+        )}
+
+        {viewMode === 'swiping' && ideas.length > 0 && !loading && (
           <div className="py-8">
             <SwipeableCards
               ideas={ideas}
