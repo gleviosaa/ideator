@@ -2,6 +2,8 @@
 
 A modern web application that helps developers discover and explore app ideas tailored to their interests and skills. Built with Next.js, Supabase, and Google Gemini AI.
 
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/gleviosaa/ideator)
+
 ## Features
 
 - **Dual Search Modes**: Free-text search or category-based filtering
