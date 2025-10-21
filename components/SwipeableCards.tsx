@@ -111,12 +111,12 @@ export function SwipeableCards({ ideas, onSwipeComplete, onViewDetails }: Swipea
             {currentIdea.technology && (
               <div className="flex gap-2 flex-wrap mt-2">
                 {currentIdea.technology && (
-                  <span className="text-xs px-2 py-1 bg-gray-800 rounded">
+                  <span className="text-xs px-3 py-1.5 bg-black text-white rounded-uber font-medium">
                     {currentIdea.technology}
                   </span>
                 )}
                 {currentIdea.complexity && (
-                  <span className="text-xs px-2 py-1 bg-gray-800 rounded">
+                  <span className="text-xs px-3 py-1.5 bg-black text-white rounded-uber font-medium">
                     {currentIdea.complexity}
                   </span>
                 )}

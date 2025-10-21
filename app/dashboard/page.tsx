@@ -167,15 +167,19 @@ export default function DashboardPage() {
         )}
 
         {loading && (
-          <div className="flex flex-col items-center justify-center py-20 space-y-6">
-            <div className="relative">
-              <div className="w-16 h-16 border-4 border-gray-200 border-t-black rounded-full animate-spin"></div>
-            </div>
-            <div className="text-center space-y-2">
-              <h3 className="text-xl font-semibold text-black">Generating Ideas...</h3>
-              <p className="text-gray-600 max-w-md">
-                Our AI is crafting personalized app ideas just for you. This may take a few moments.
-              </p>
+          <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50">
+            <div className="bg-white rounded-uber-xl p-8 shadow-uber-xl max-w-md mx-4">
+              <div className="flex flex-col items-center space-y-6">
+                <div className="relative">
+                  <div className="w-16 h-16 border-4 border-gray-200 border-t-black rounded-full animate-spin"></div>
+                </div>
+                <div className="text-center space-y-2">
+                  <h3 className="text-xl font-semibold text-black">Generating Ideas...</h3>
+                  <p className="text-gray-600">
+                    Our AI is crafting personalized app ideas just for you. This may take a few moments.
+                  </p>
+                </div>
+              </div>
             </div>
           </div>
         )}
