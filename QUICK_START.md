@@ -4,9 +4,11 @@
 - ✓ Supabase Project ID: `yugctpsfsmgmrmeyvrgl`
 - ✓ Supabase URL configured in `.env.local`
 - ✓ Supabase Anon Key configured in `.env.local`
+- ✓ Gemini API Key configured in `.env.local`
 - ✓ Git repository connected to GitHub
+- ✓ Build tested and working
 
-## 🚀 Next Steps (3 minutes)
+## 🚀 Next Steps (2 minutes)
 
 ### Step 1: Set up Database (1 min)
 1. Open: https://supabase.com/dashboard/project/yugctpsfsmgmrmeyvrgl/editor
@@ -14,13 +16,7 @@
 3. Copy all contents from `supabase-schema.sql`
 4. Paste and click **Run**
 
-### Step 2: Get Gemini API Key (1 min)
-1. Visit: https://makersuite.google.com/app/apikey
-2. Click **Create API Key**
-3. Copy the key
-4. Open `.env.local` and replace `your-gemini-api-key-here` with your actual key
-
-### Step 3: Run the App (30 sec)
+### Step 2: Run the App (30 sec)
 ```bash
 npm install
 npm run dev
@@ -32,11 +28,11 @@ Open http://localhost:3000 🎉
 
 1. Go to https://vercel.com/new
 2. Import: `gleviosaa/ideator`
-3. Add environment variables:
+3. Add environment variables (copy from `.env.production.example`):
    ```
    NEXT_PUBLIC_SUPABASE_URL=https://yugctpsfsmgmrmeyvrgl.supabase.co
    NEXT_PUBLIC_SUPABASE_ANON_KEY=sb_publishable_pn1GOxi_LiL1n_OvOgp0IA_ksGFWyEY
-   GEMINI_API_KEY=your-actual-gemini-key
+   GEMINI_API_KEY=AIzaSyCw-yjaMNMZJFApDFwpkT0DE0sTCsU3PxE
    ```
 4. Click **Deploy**
 
