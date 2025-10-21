@@ -1,14 +1,13 @@
 'use client'
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { LogOut, Bookmark } from 'lucide-react';
+import { LogOut, Bookmark, Grid3x3 } from 'lucide-react';
 import { createClient } from '@/lib/supabase/client';
 import { SearchBar } from '@/components/SearchBar';
-import { CategorySelector } from '@/components/CategorySelector';
 import { SwipeableCards } from '@/components/SwipeableCards';
 import { Button } from '@/components/ui/button';
-import { Idea, CategoryFilters } from '@/types';
+import { Idea } from '@/types';
 import toast from 'react-hot-toast';
 
 export const dynamic = 'force-dynamic'
@@ -22,6 +21,17 @@ export default function DashboardPage() {
   const [loading, setLoading] = useState(false);
   const router = useRouter();
   const supabase = createClient();
+
+  // Check for generated ideas from category search page
+  useEffect(() => {
+    const storedIdeas = sessionStorage.getItem('generatedIdeas');
+    if (storedIdeas) {
+      const parsedIdeas = JSON.parse(storedIdeas);
+      setIdeas(parsedIdeas);
+      setViewMode('swiping');
+      sessionStorage.removeItem('generatedIdeas');
+    }
+  }, []);
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
@@ -53,29 +63,6 @@ export default function DashboardPage() {
     }
   };
 
-  const handleCategorySubmit = async (filters: CategoryFilters) => {
-    setLoading(true);
-    try {
-      const response = await fetch('/api/generate-ideas', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ filters, mode: 'category_select' }),
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to generate ideas');
-      }
-
-      const data = await response.json();
-      setIdeas(data.ideas);
-      setViewMode('swiping');
-      toast.success('Ideas generated!');
-    } catch (error) {
-      toast.error('Failed to generate ideas. Please try again.');
-    } finally {
-      setLoading(false);
-    }
-  };
 
   const handleSwipeComplete = async (likedIdeas: Idea[]) => {
     setSavedIdeas(likedIdeas);
@@ -162,7 +149,15 @@ export default function DashboardPage() {
               </div>
             </div>
 
-            <CategorySelector onSubmit={handleCategorySubmit} loading={loading} />
+            <Button
+              variant="outline"
+              size="lg"
+              className="w-full"
+              onClick={() => router.push('/category-search')}
+            >
+              <Grid3x3 className="mr-2 h-5 w-5" />
+              Search by Category
+            </Button>
           </div>
         )}
 
