@@ -112,20 +112,26 @@ export default function DashboardPage() {
   };
 
   return (
-    <div className="min-h-screen p-4 md:p-8">
+    <div className="min-h-screen bg-gray-50 p-4 md:p-6">
       {/* Header */}
-      <div className="max-w-4xl mx-auto mb-8">
-        <div className="flex justify-between items-center">
-          <h1 className="text-3xl font-bold">Ideator</h1>
-          <div className="flex gap-2">
+      <div className="max-w-5xl mx-auto mb-8">
+        <div className="flex justify-between items-center py-4">
+          <h1 className="text-2xl font-bold text-black">Ideator</h1>
+          <div className="flex gap-3">
             <Button
-              variant="outline"
+              variant="ghost"
               size="icon"
               onClick={() => router.push('/saved')}
+              className="rounded-full"
             >
               <Bookmark className="h-5 w-5" />
             </Button>
-            <Button variant="outline" size="icon" onClick={handleLogout}>
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={handleLogout}
+              className="rounded-full"
+            >
               <LogOut className="h-5 w-5" />
             </Button>
           </div>
@@ -133,21 +139,28 @@ export default function DashboardPage() {
       </div>
 
       {/* Main Content */}
-      <div className="max-w-4xl mx-auto">
+      <div className="max-w-5xl mx-auto">
         {viewMode === 'search' && (
           <div className="space-y-8">
-            <div className="text-center space-y-4">
-              <h2 className="text-2xl font-semibold">
+            <div className="text-center space-y-4 py-8">
+              <h2 className="text-3xl md:text-4xl font-bold text-black">
                 What kind of app do you want to build?
               </h2>
-              <p className="text-gray-400">
-                Describe your idea or select categories to get started
+              <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+                Describe your idea or select categories to get personalized suggestions
               </p>
             </div>
 
             <SearchBar onSearch={handleSearch} loading={loading} />
 
-            <div className="text-center text-gray-500">or</div>
+            <div className="relative">
+              <div className="absolute inset-0 flex items-center">
+                <div className="w-full border-t border-gray-200"></div>
+              </div>
+              <div className="relative flex justify-center text-sm">
+                <span className="px-4 bg-gray-50 text-gray-500">or</span>
+              </div>
+            </div>
 
             <CategorySelector onSubmit={handleCategorySubmit} loading={loading} />
           </div>
@@ -164,14 +177,14 @@ export default function DashboardPage() {
         )}
 
         {viewMode === 'results' && (
-          <div className="space-y-6">
-            <div className="text-center space-y-4">
-              <h2 className="text-2xl font-semibold">
+          <div className="space-y-8">
+            <div className="text-center space-y-4 py-8">
+              <h2 className="text-3xl md:text-4xl font-bold text-black">
                 {savedIdeas.length > 0
-                  ? `You saved ${savedIdeas.length} idea(s)!`
+                  ? `You saved ${savedIdeas.length} idea${savedIdeas.length > 1 ? 's' : ''}!`
                   : 'No ideas saved'}
               </h2>
-              <p className="text-gray-400">
+              <p className="text-lg text-gray-600">
                 {savedIdeas.length > 0
                   ? 'View your saved ideas or start a new search'
                   : 'Start a new search to discover more ideas'}
@@ -183,20 +196,20 @@ export default function DashboardPage() {
                 {savedIdeas.map((idea) => (
                   <div
                     key={idea.id}
-                    className="p-4 border border-gray-800 rounded-lg hover:border-gray-700 cursor-pointer"
+                    className="p-6 bg-white border border-gray-100 rounded-uber-lg hover:shadow-uber-lg transition-all duration-200 cursor-pointer"
                     onClick={() => handleViewDetails(idea)}
                   >
-                    <h3 className="font-semibold text-lg mb-2">{idea.title}</h3>
-                    <p className="text-gray-400 text-sm">{idea.description}</p>
+                    <h3 className="font-semibold text-xl mb-2 text-black">{idea.title}</h3>
+                    <p className="text-gray-600">{idea.description}</p>
                   </div>
                 ))}
               </div>
             )}
 
-            <div className="flex gap-4 justify-center">
-              <Button onClick={handleNewSearch}>New Search</Button>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
+              <Button onClick={handleNewSearch} size="lg">New Search</Button>
               {savedIdeas.length > 0 && (
-                <Button variant="outline" onClick={() => router.push('/saved')}>
+                <Button variant="outline" size="lg" onClick={() => router.push('/saved')}>
                   View All Saved Ideas
                 </Button>
               )}
