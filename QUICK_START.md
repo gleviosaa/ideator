@@ -28,15 +28,20 @@ Open http://localhost:3000 🎉
 
 1. Go to https://vercel.com/new
 2. Import: `gleviosaa/ideator`
-3. Add environment variables (copy from `.env.production.example`):
+3. **IMPORTANT**: Set Framework Preset to **Next.js**
+4. Add environment variables (copy from `.env.production.example`):
    ```
    NEXT_PUBLIC_SUPABASE_URL=https://yugctpsfsmgmrmeyvrgl.supabase.co
    NEXT_PUBLIC_SUPABASE_ANON_KEY=sb_publishable_pn1GOxi_LiL1n_OvOgp0IA_ksGFWyEY
    GEMINI_API_KEY=AIzaSyCw-yjaMNMZJFApDFwpkT0DE0sTCsU3PxE
    ```
-4. Click **Deploy**
+5. Click **Deploy**
 
 Done! Your app will be live in 2-3 minutes.
 
+### Having deployment issues?
+See [VERCEL_DEPLOYMENT.md](./VERCEL_DEPLOYMENT.md) for detailed troubleshooting.
+
 ## 📖 Full Documentation
-See [SETUP.md](./SETUP.md) for detailed instructions and troubleshooting.
+- [SETUP.md](./SETUP.md) - Detailed setup instructions
+- [VERCEL_DEPLOYMENT.md](./VERCEL_DEPLOYMENT.md) - Vercel deployment guide
