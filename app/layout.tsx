@@ -42,7 +42,13 @@ export default function RootLayout({
                 secondary: '#FFFFFF',
               },
             },
+            duration: 1500,
           }}
+          containerStyle={{
+            top: 20,
+          }}
+          reverseOrder={false}
+          gutter={8}
         />
       </body>
     </html>

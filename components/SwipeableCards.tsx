@@ -35,11 +35,12 @@ export function SwipeableCards({ ideas, onSwipeComplete, onViewDetails }: Swipea
       setExitX(direction === 'right' ? 300 : -300);
 
       // Show toast and handle save
+      toast.dismiss(); // Dismiss any existing toasts
       if (direction === 'right') {
         setSavedIdeas(prev => [...prev, currentIdea]);
-        toast.success('Idea saved!', { icon: '❤️' });
+        toast.success('Idea saved!', { icon: '❤️', duration: 1500 });
       } else {
-        toast('Idea skipped', { icon: '👋' });
+        toast('Idea skipped', { icon: '👋', duration: 1500 });
       }
 
       // Move to next card
@@ -61,11 +62,12 @@ export function SwipeableCards({ ideas, onSwipeComplete, onViewDetails }: Swipea
     setExitX(direction === 'right' ? 300 : -300);
 
     // Show toast and handle save
+    toast.dismiss(); // Dismiss any existing toasts
     if (direction === 'right') {
       setSavedIdeas(prev => [...prev, currentIdea]);
-      toast.success('Idea saved!', { icon: '❤️' });
+      toast.success('Idea saved!', { icon: '❤️', duration: 1500 });
     } else {
-      toast('Idea skipped', { icon: '👋' });
+      toast('Idea skipped', { icon: '👋', duration: 1500 });
     }
 
     setTimeout(() => {
