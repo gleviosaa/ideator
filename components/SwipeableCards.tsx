@@ -165,23 +165,23 @@ export function SwipeableCards({ ideas, onSwipeComplete, onViewDetails }: Swipea
               {currentIdea.description}
             </CardDescription>
 
-            <div className="space-y-2 text-sm">
+            <div className="space-y-2 text-sm text-gray-700">
               {currentIdea.time_to_build && (
                 <div>
-                  <span className="text-gray-400">Time to Build:</span>{' '}
-                  <span>{currentIdea.time_to_build}</span>
+                  <span className="text-gray-600 font-medium">Time to Build:</span>{' '}
+                  <span className="text-gray-800">{currentIdea.time_to_build}</span>
                 </div>
               )}
               {currentIdea.monetization && (
                 <div>
-                  <span className="text-gray-400">Monetization:</span>{' '}
-                  <span>{currentIdea.monetization}</span>
+                  <span className="text-gray-600 font-medium">Monetization:</span>{' '}
+                  <span className="text-gray-800">{currentIdea.monetization}</span>
                 </div>
               )}
               {currentIdea.target_audience && (
                 <div>
-                  <span className="text-gray-400">Target Audience:</span>{' '}
-                  <span>{currentIdea.target_audience}</span>
+                  <span className="text-gray-600 font-medium">Target Audience:</span>{' '}
+                  <span className="text-gray-800">{currentIdea.target_audience}</span>
                 </div>
               )}
             </div>
@@ -201,8 +201,8 @@ export function SwipeableCards({ ideas, onSwipeComplete, onViewDetails }: Swipea
 
       {/* Swipe hint on first card */}
       {currentIndex === 0 && (
-        <div className="text-center text-gray-500 text-sm px-4">
-          Save, skip, or mark for later
+        <div className="text-center text-gray-700 text-sm px-4 font-medium">
+          👆 Tap buttons or swipe left/right on the card
         </div>
       )}
 

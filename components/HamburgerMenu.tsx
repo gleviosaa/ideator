@@ -2,9 +2,8 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Menu, X, Clock, Heart, LogOut, Palette } from 'lucide-react';
+import { Menu, X, Clock, Heart, LogOut } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { ThemeToggle } from '@/components/theme-toggle';
 import { createClient } from '@/lib/supabase/client';
 import toast from 'react-hot-toast';
 
@@ -73,13 +72,13 @@ export function HamburgerMenu() {
 
       {/* Side Menu */}
       <div
-        className={`fixed top-0 left-0 h-full w-72 bg-white dark:bg-gray-900 shadow-2xl z-50 transform transition-transform duration-300 ease-in-out ${
+        className={`fixed top-0 left-0 h-full w-72 bg-white shadow-2xl z-50 transform transition-transform duration-300 ease-in-out ${
           isOpen ? 'translate-x-0' : '-translate-x-full'
         }`}
       >
         {/* Header */}
-        <div className="flex items-center justify-between p-4 border-b dark:border-gray-800">
-          <h2 className="text-xl font-bold text-black dark:text-white">Menu</h2>
+        <div className="flex items-center justify-between p-4 border-b">
+          <h2 className="text-xl font-bold text-black">Menu</h2>
           <Button
             variant="ghost"
             size="icon"
@@ -101,7 +100,7 @@ export function HamburgerMenu() {
                   <Button
                     variant="ghost"
                     onClick={item.onClick}
-                    className="w-full justify-start text-left px-4 py-6 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-uber"
+                    className="w-full justify-start text-left px-4 py-6 hover:bg-gray-100 rounded-uber"
                   >
                     <Icon className="h-5 w-5 mr-3" />
                     <span className="text-base font-medium">{item.label}</span>
@@ -109,17 +108,6 @@ export function HamburgerMenu() {
                 </li>
               );
             })}
-
-            {/* Theme Toggle */}
-            <li>
-              <div className="flex items-center justify-between px-4 py-3">
-                <div className="flex items-center">
-                  <Palette className="h-5 w-5 mr-3" />
-                  <span className="text-base font-medium">Theme</span>
-                </div>
-                <ThemeToggle />
-              </div>
-            </li>
           </ul>
         </nav>
       </div>

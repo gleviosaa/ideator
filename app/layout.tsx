@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { Toaster } from 'react-hot-toast';
-import { ThemeProvider } from '@/components/theme-provider';
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -20,18 +19,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en">
       <head>
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
       </head>
       <body className="antialiased">
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="light"
-          enableSystem
-          disableTransitionOnChange
-        >
-          {children}
+        {children}
         <Toaster
           position="top-center"
           toastOptions={{
@@ -57,7 +50,6 @@ export default function RootLayout({
           reverseOrder={false}
           gutter={8}
         />
-        </ThemeProvider>
       </body>
     </html>
   );
