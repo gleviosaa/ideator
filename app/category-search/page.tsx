@@ -197,7 +197,7 @@ export default function CategorySearchPage() {
                   <Button
                     variant="default"
                     size="sm"
-                    onClick={() => handleCategorySelect('technology', filters.technology)}
+                    onClick={() => handleCategorySelect('technology', filters.technology!)}
                     disabled={loading}
                   >
                     {filters.technology}
@@ -251,7 +251,7 @@ export default function CategorySearchPage() {
                   <Button
                     variant="default"
                     size="sm"
-                    onClick={() => handleCategorySelect('context', filters.context)}
+                    onClick={() => handleCategorySelect('context', filters.context!)}
                     disabled={loading}
                   >
                     {filters.context}
@@ -305,7 +305,7 @@ export default function CategorySearchPage() {
                   <Button
                     variant="default"
                     size="sm"
-                    onClick={() => handleCategorySelect('monetization', filters.monetization)}
+                    onClick={() => handleCategorySelect('monetization', filters.monetization!)}
                     disabled={loading}
                   >
                     {filters.monetization}
@@ -359,7 +359,7 @@ export default function CategorySearchPage() {
                   <Button
                     variant="default"
                     size="sm"
-                    onClick={() => handleCategorySelect('targetAudience', filters.targetAudience)}
+                    onClick={() => handleCategorySelect('targetAudience', filters.targetAudience!)}
                     disabled={loading}
                   >
                     {filters.targetAudience}
