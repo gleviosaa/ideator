@@ -75,14 +75,14 @@ export default function SavedIdeasPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <p className="text-gray-400">Loading...</p>
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <p className="text-gray-600">Loading...</p>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen p-4 md:p-8">
+    <div className="min-h-screen bg-gray-50 p-4 md:p-8">
       <div className="max-w-4xl mx-auto">
         {/* Header */}
         <div className="mb-8">
@@ -94,8 +94,8 @@ export default function SavedIdeasPage() {
             <ArrowLeft className="mr-2 h-4 w-4" />
             Back to Dashboard
           </Button>
-          <h1 className="text-3xl font-bold">Saved Ideas</h1>
-          <p className="text-gray-400 mt-2">
+          <h1 className="text-3xl font-bold text-black">Saved Ideas</h1>
+          <p className="text-gray-600 mt-2">
             {savedIdeas.length} {savedIdeas.length === 1 ? 'idea' : 'ideas'} saved
           </p>
         </div>
@@ -103,7 +103,7 @@ export default function SavedIdeasPage() {
         {/* Ideas Grid */}
         {savedIdeas.length === 0 ? (
           <div className="text-center py-12">
-            <p className="text-gray-400 mb-4">No saved ideas yet</p>
+            <p className="text-gray-600 mb-4">No saved ideas yet</p>
             <Button onClick={() => router.push('/dashboard')}>
               Discover Ideas
             </Button>
@@ -113,7 +113,7 @@ export default function SavedIdeasPage() {
             {savedIdeas.map((idea: any) => (
               <Card
                 key={idea.id}
-                className="cursor-pointer hover:border-gray-700 transition-colors"
+                className="cursor-pointer hover:shadow-uber-lg transition-all"
               >
                 <CardHeader>
                   <div className="flex justify-between items-start">
@@ -125,12 +125,12 @@ export default function SavedIdeasPage() {
                       {idea.technology && (
                         <div className="flex gap-2 flex-wrap">
                           {idea.technology && (
-                            <span className="text-xs px-2 py-1 bg-gray-800 rounded">
+                            <span className="text-xs px-3 py-1.5 bg-black text-white rounded-uber font-medium">
                               {idea.technology}
                             </span>
                           )}
                           {idea.complexity && (
-                            <span className="text-xs px-2 py-1 bg-gray-800 rounded">
+                            <span className="text-xs px-3 py-1.5 bg-black text-white rounded-uber font-medium">
                               {idea.complexity}
                             </span>
                           )}
