@@ -8,7 +8,10 @@ export async function GET(request: NextRequest) {
 
   if (code) {
     const supabase = await createClient()
+    // Exchange code for session to verify the email
     await supabase.auth.exchangeCodeForSession(code)
+    // Immediately sign out so they see the confirmation page without being logged in
+    await supabase.auth.signOut()
   }
 
   // Redirect to confirmation page
