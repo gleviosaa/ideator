@@ -7,6 +7,7 @@ import { createClient } from '@/lib/supabase/client';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
+import { SearchConfirmationModal } from '@/components/SearchConfirmationModal';
 import { CATEGORIES, CategoryFilters } from '@/types';
 import toast from 'react-hot-toast';
 
@@ -16,6 +17,7 @@ export default function CategorySearchPage() {
   const [filters, setFilters] = useState<CategoryFilters>({});
   const [additionalComments, setAdditionalComments] = useState('');
   const [loading, setLoading] = useState(false);
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
   const router = useRouter();
   const supabase = createClient();
 
@@ -26,7 +28,12 @@ export default function CategorySearchPage() {
     }));
   };
 
-  const handleSubmit = async () => {
+  const handleSubmit = () => {
+    setShowConfirmModal(true);
+  };
+
+  const handleConfirmSearch = async () => {
+    setShowConfirmModal(false);
     setLoading(true);
     try {
       const response = await fetch('/api/generate-ideas', {
@@ -233,6 +240,16 @@ export default function CategorySearchPage() {
           </div>
         </div>
       )}
+
+      {/* Confirmation Modal */}
+      <SearchConfirmationModal
+        isOpen={showConfirmModal}
+        onClose={() => setShowConfirmModal(false)}
+        onConfirm={handleConfirmSearch}
+        searchMode="category_select"
+        filters={filters}
+        additionalComments={additionalComments.trim() || undefined}
+      />
     </div>
   );
 }

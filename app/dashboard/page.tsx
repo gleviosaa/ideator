@@ -6,6 +6,7 @@ import { LogOut, Bookmark, Grid3x3, Clock } from 'lucide-react';
 import { createClient } from '@/lib/supabase/client';
 import { SearchBar } from '@/components/SearchBar';
 import { SwipeableCards } from '@/components/SwipeableCards';
+import { SearchConfirmationModal } from '@/components/SearchConfirmationModal';
 import { Button } from '@/components/ui/button';
 import { Idea } from '@/types';
 import toast from 'react-hot-toast';
@@ -19,6 +20,8 @@ export default function DashboardPage() {
   const [ideas, setIdeas] = useState<Idea[]>([]);
   const [savedIdeas, setSavedIdeas] = useState<Idea[]>([]);
   const [loading, setLoading] = useState(false);
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [pendingQuery, setPendingQuery] = useState<string>('');
   const router = useRouter();
   const supabase = createClient();
 
@@ -39,13 +42,19 @@ export default function DashboardPage() {
     router.refresh();
   };
 
-  const handleSearch = async (query: string) => {
+  const handleSearch = (query: string) => {
+    setPendingQuery(query);
+    setShowConfirmModal(true);
+  };
+
+  const handleConfirmSearch = async () => {
+    setShowConfirmModal(false);
     setLoading(true);
     try {
       const response = await fetch('/api/generate-ideas', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ query, mode: 'free_text' }),
+        body: JSON.stringify({ query: pendingQuery, mode: 'free_text' }),
       });
 
       if (!response.ok) {
@@ -58,7 +67,7 @@ export default function DashboardPage() {
       toast.success('Ideas generated!');
 
       // Save to search history
-      await saveToHistory(query, 'free_text', null, data.ideas);
+      await saveToHistory(pendingQuery, 'free_text', null, data.ideas);
     } catch (error) {
       toast.error('Failed to generate ideas. Please try again.');
     } finally {
@@ -264,6 +273,15 @@ export default function DashboardPage() {
           </div>
         )}
       </div>
+
+      {/* Confirmation Modal */}
+      <SearchConfirmationModal
+        isOpen={showConfirmModal}
+        onClose={() => setShowConfirmModal(false)}
+        onConfirm={handleConfirmSearch}
+        searchMode="free_text"
+        query={pendingQuery}
+      />
     </div>
   );
 }
