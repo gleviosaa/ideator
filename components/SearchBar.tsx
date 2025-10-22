@@ -26,7 +26,7 @@ export function SearchBar({ onSearch, loading }: SearchBarProps) {
         <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
         <Input
           type="text"
-          placeholder="Describe your app idea or enter comma-separated tags..."
+          placeholder="Describe your app idea..."
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           className="pl-12 pr-4 py-6 text-base"

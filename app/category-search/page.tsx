@@ -178,7 +178,7 @@ export default function CategorySearchPage() {
                   className="text-gray-600 hover:text-black"
                 >
                   <Plus className="h-4 w-4 mr-1" />
-                  Add Custom
+                  Add
                 </Button>
               </div>
               <div className="flex flex-wrap gap-2 mb-2">
@@ -193,6 +193,16 @@ export default function CategorySearchPage() {
                     {tech}
                   </Button>
                 ))}
+                {filters.technology && !CATEGORIES.technology.includes(filters.technology) && (
+                  <Button
+                    variant="default"
+                    size="sm"
+                    onClick={() => handleCategorySelect('technology', filters.technology)}
+                    disabled={loading}
+                  >
+                    {filters.technology}
+                  </Button>
+                )}
               </div>
               {showCustomInput.technology && (
                 <div className="flex gap-2 mt-3">
@@ -222,7 +232,7 @@ export default function CategorySearchPage() {
                   className="text-gray-600 hover:text-black"
                 >
                   <Plus className="h-4 w-4 mr-1" />
-                  Add Custom
+                  Add
                 </Button>
               </div>
               <div className="flex flex-wrap gap-2 mb-2">
@@ -237,6 +247,16 @@ export default function CategorySearchPage() {
                     {ctx}
                   </Button>
                 ))}
+                {filters.context && !CATEGORIES.context.includes(filters.context) && (
+                  <Button
+                    variant="default"
+                    size="sm"
+                    onClick={() => handleCategorySelect('context', filters.context)}
+                    disabled={loading}
+                  >
+                    {filters.context}
+                  </Button>
+                )}
               </div>
               {showCustomInput.context && (
                 <div className="flex gap-2 mt-3">
@@ -266,7 +286,7 @@ export default function CategorySearchPage() {
                   className="text-gray-600 hover:text-black"
                 >
                   <Plus className="h-4 w-4 mr-1" />
-                  Add Custom
+                  Add
                 </Button>
               </div>
               <div className="flex flex-wrap gap-2 mb-2">
@@ -281,6 +301,16 @@ export default function CategorySearchPage() {
                     {model}
                   </Button>
                 ))}
+                {filters.monetization && !CATEGORIES.monetization.includes(filters.monetization) && (
+                  <Button
+                    variant="default"
+                    size="sm"
+                    onClick={() => handleCategorySelect('monetization', filters.monetization)}
+                    disabled={loading}
+                  >
+                    {filters.monetization}
+                  </Button>
+                )}
               </div>
               {showCustomInput.monetization && (
                 <div className="flex gap-2 mt-3">
@@ -310,7 +340,7 @@ export default function CategorySearchPage() {
                   className="text-gray-600 hover:text-black"
                 >
                   <Plus className="h-4 w-4 mr-1" />
-                  Add Custom
+                  Add
                 </Button>
               </div>
               <div className="flex flex-wrap gap-2 mb-2">
@@ -325,6 +355,16 @@ export default function CategorySearchPage() {
                     {audience}
                   </Button>
                 ))}
+                {filters.targetAudience && !CATEGORIES.targetAudience.includes(filters.targetAudience) && (
+                  <Button
+                    variant="default"
+                    size="sm"
+                    onClick={() => handleCategorySelect('targetAudience', filters.targetAudience)}
+                    disabled={loading}
+                  >
+                    {filters.targetAudience}
+                  </Button>
+                )}
               </div>
               {showCustomInput.targetAudience && (
                 <div className="flex gap-2 mt-3">
