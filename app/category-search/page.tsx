@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { ArrowLeft, Plus } from 'lucide-react';
+import { ArrowLeft, Plus, ChevronDown, ChevronUp } from 'lucide-react';
 import { createClient } from '@/lib/supabase/client';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -19,6 +19,7 @@ export default function CategorySearchPage() {
   const [additionalComments, setAdditionalComments] = useState('');
   const [loading, setLoading] = useState(false);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [openCategory, setOpenCategory] = useState<string | null>('technology');
   const [customInputs, setCustomInputs] = useState<Record<string, string>>({
     technology: '',
     context: '',
@@ -39,6 +40,10 @@ export default function CategorySearchPage() {
       ...prev,
       [category]: prev[category] === value ? undefined : value,
     }));
+  };
+
+  const handleToggleCategory = (category: string) => {
+    setOpenCategory(openCategory === category ? null : category);
   };
 
   const handleToggleCustomInput = (category: string) => {
@@ -171,225 +176,305 @@ export default function CategorySearchPage() {
           <CardHeader>
             <CardTitle>Filter Options</CardTitle>
           </CardHeader>
-          <CardContent className="space-y-6">
+          <CardContent className="space-y-3">
             {/* Technology */}
-            <div>
-              <div className="flex justify-between items-center mb-3">
-                <h3 className="font-medium">Technology/Platform</h3>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => handleToggleCustomInput('technology')}
-                  className="text-gray-600 hover:text-black"
-                >
-                  <Plus className="h-4 w-4 mr-1" />
-                  Add
-                </Button>
-              </div>
-              <div className="flex flex-wrap gap-2 mb-2">
-                {CATEGORIES.technology.map((tech) => (
-                  <Button
-                    key={tech}
-                    variant={filters.technology === tech ? 'default' : 'outline'}
-                    size="sm"
-                    onClick={() => handleCategorySelect('technology', tech)}
-                    disabled={loading}
-                  >
-                    {tech}
-                  </Button>
-                ))}
-                {filters.technology && !CATEGORIES.technology.includes(filters.technology) && (
-                  <Button
-                    variant="default"
-                    size="sm"
-                    onClick={() => handleCategorySelect('technology', filters.technology!)}
-                    disabled={loading}
-                  >
-                    {filters.technology}
-                  </Button>
+            <div className="border border-gray-200 rounded-uber-lg overflow-hidden bg-white hover:shadow-uber transition-shadow duration-200">
+              <button
+                onClick={() => handleToggleCategory('technology')}
+                className="w-full px-4 py-3 flex items-center justify-between text-left hover:bg-gray-50 transition-colors duration-200"
+                disabled={loading}
+              >
+                <div className="flex items-center gap-2">
+                  <h3 className="font-semibold text-black">Technology/Platform</h3>
+                  {filters.technology && (
+                    <span className="text-xs px-2 py-0.5 bg-black text-white rounded-full">
+                      Selected
+                    </span>
+                  )}
+                </div>
+                {openCategory === 'technology' ? (
+                  <ChevronUp className="h-5 w-5 text-gray-500 flex-shrink-0" />
+                ) : (
+                  <ChevronDown className="h-5 w-5 text-gray-500 flex-shrink-0" />
                 )}
-              </div>
-              {showCustomInput.technology && (
-                <div className="flex gap-2 mt-3">
-                  <Input
-                    type="text"
-                    placeholder="Enter custom technology..."
-                    value={customInputs.technology}
-                    onChange={(e) => handleCustomInputChange('technology', e.target.value)}
-                    onKeyPress={(e) => e.key === 'Enter' && handleAddCustom('technology')}
-                    className="flex-1"
-                  />
-                  <Button onClick={() => handleAddCustom('technology')} size="sm">
-                    Add
+              </button>
+              {openCategory === 'technology' && (
+                <div className="px-4 pb-4 pt-2 border-t border-gray-100">
+                  <div className="flex flex-wrap gap-2 mb-2">
+                    {CATEGORIES.technology.map((tech) => (
+                      <Button
+                        key={tech}
+                        variant={filters.technology === tech ? 'default' : 'outline'}
+                        size="sm"
+                        onClick={() => handleCategorySelect('technology', tech)}
+                        disabled={loading}
+                      >
+                        {tech}
+                      </Button>
+                    ))}
+                    {filters.technology && !CATEGORIES.technology.includes(filters.technology) && (
+                      <Button
+                        variant="default"
+                        size="sm"
+                        onClick={() => handleCategorySelect('technology', filters.technology!)}
+                        disabled={loading}
+                      >
+                        {filters.technology}
+                      </Button>
+                    )}
+                  </div>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => handleToggleCustomInput('technology')}
+                    className="text-gray-600 hover:text-black mt-2"
+                  >
+                    <Plus className="h-4 w-4 mr-1" />
+                    Add Custom
                   </Button>
+                  {showCustomInput.technology && (
+                    <div className="flex gap-2 mt-3">
+                      <Input
+                        type="text"
+                        placeholder="Enter custom technology..."
+                        value={customInputs.technology}
+                        onChange={(e) => handleCustomInputChange('technology', e.target.value)}
+                        onKeyPress={(e) => e.key === 'Enter' && handleAddCustom('technology')}
+                        className="flex-1"
+                      />
+                      <Button onClick={() => handleAddCustom('technology')} size="sm">
+                        Add
+                      </Button>
+                    </div>
+                  )}
                 </div>
               )}
             </div>
 
             {/* Context */}
-            <div>
-              <div className="flex justify-between items-center mb-3">
-                <h3 className="font-medium">Context</h3>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => handleToggleCustomInput('context')}
-                  className="text-gray-600 hover:text-black"
-                >
-                  <Plus className="h-4 w-4 mr-1" />
-                  Add
-                </Button>
-              </div>
-              <div className="flex flex-wrap gap-2 mb-2">
-                {CATEGORIES.context.map((ctx) => (
-                  <Button
-                    key={ctx}
-                    variant={filters.context === ctx ? 'default' : 'outline'}
-                    size="sm"
-                    onClick={() => handleCategorySelect('context', ctx)}
-                    disabled={loading}
-                  >
-                    {ctx}
-                  </Button>
-                ))}
-                {filters.context && !CATEGORIES.context.includes(filters.context) && (
-                  <Button
-                    variant="default"
-                    size="sm"
-                    onClick={() => handleCategorySelect('context', filters.context!)}
-                    disabled={loading}
-                  >
-                    {filters.context}
-                  </Button>
+            <div className="border border-gray-200 rounded-uber-lg overflow-hidden bg-white hover:shadow-uber transition-shadow duration-200">
+              <button
+                onClick={() => handleToggleCategory('context')}
+                className="w-full px-4 py-3 flex items-center justify-between text-left hover:bg-gray-50 transition-colors duration-200"
+                disabled={loading}
+              >
+                <div className="flex items-center gap-2">
+                  <h3 className="font-semibold text-black">Context</h3>
+                  {filters.context && (
+                    <span className="text-xs px-2 py-0.5 bg-black text-white rounded-full">
+                      Selected
+                    </span>
+                  )}
+                </div>
+                {openCategory === 'context' ? (
+                  <ChevronUp className="h-5 w-5 text-gray-500 flex-shrink-0" />
+                ) : (
+                  <ChevronDown className="h-5 w-5 text-gray-500 flex-shrink-0" />
                 )}
-              </div>
-              {showCustomInput.context && (
-                <div className="flex gap-2 mt-3">
-                  <Input
-                    type="text"
-                    placeholder="Enter custom context..."
-                    value={customInputs.context}
-                    onChange={(e) => handleCustomInputChange('context', e.target.value)}
-                    onKeyPress={(e) => e.key === 'Enter' && handleAddCustom('context')}
-                    className="flex-1"
-                  />
-                  <Button onClick={() => handleAddCustom('context')} size="sm">
-                    Add
+              </button>
+              {openCategory === 'context' && (
+                <div className="px-4 pb-4 pt-2 border-t border-gray-100">
+                  <div className="flex flex-wrap gap-2 mb-2">
+                    {CATEGORIES.context.map((ctx) => (
+                      <Button
+                        key={ctx}
+                        variant={filters.context === ctx ? 'default' : 'outline'}
+                        size="sm"
+                        onClick={() => handleCategorySelect('context', ctx)}
+                        disabled={loading}
+                      >
+                        {ctx}
+                      </Button>
+                    ))}
+                    {filters.context && !CATEGORIES.context.includes(filters.context) && (
+                      <Button
+                        variant="default"
+                        size="sm"
+                        onClick={() => handleCategorySelect('context', filters.context!)}
+                        disabled={loading}
+                      >
+                        {filters.context}
+                      </Button>
+                    )}
+                  </div>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => handleToggleCustomInput('context')}
+                    className="text-gray-600 hover:text-black mt-2"
+                  >
+                    <Plus className="h-4 w-4 mr-1" />
+                    Add Custom
                   </Button>
+                  {showCustomInput.context && (
+                    <div className="flex gap-2 mt-3">
+                      <Input
+                        type="text"
+                        placeholder="Enter custom context..."
+                        value={customInputs.context}
+                        onChange={(e) => handleCustomInputChange('context', e.target.value)}
+                        onKeyPress={(e) => e.key === 'Enter' && handleAddCustom('context')}
+                        className="flex-1"
+                      />
+                      <Button onClick={() => handleAddCustom('context')} size="sm">
+                        Add
+                      </Button>
+                    </div>
+                  )}
                 </div>
               )}
             </div>
 
             {/* Monetization */}
-            <div>
-              <div className="flex justify-between items-center mb-3">
-                <h3 className="font-medium">Monetization</h3>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => handleToggleCustomInput('monetization')}
-                  className="text-gray-600 hover:text-black"
-                >
-                  <Plus className="h-4 w-4 mr-1" />
-                  Add
-                </Button>
-              </div>
-              <div className="flex flex-wrap gap-2 mb-2">
-                {CATEGORIES.monetization.map((model) => (
-                  <Button
-                    key={model}
-                    variant={filters.monetization === model ? 'default' : 'outline'}
-                    size="sm"
-                    onClick={() => handleCategorySelect('monetization', model)}
-                    disabled={loading}
-                  >
-                    {model}
-                  </Button>
-                ))}
-                {filters.monetization && !CATEGORIES.monetization.includes(filters.monetization) && (
-                  <Button
-                    variant="default"
-                    size="sm"
-                    onClick={() => handleCategorySelect('monetization', filters.monetization!)}
-                    disabled={loading}
-                  >
-                    {filters.monetization}
-                  </Button>
+            <div className="border border-gray-200 rounded-uber-lg overflow-hidden bg-white hover:shadow-uber transition-shadow duration-200">
+              <button
+                onClick={() => handleToggleCategory('monetization')}
+                className="w-full px-4 py-3 flex items-center justify-between text-left hover:bg-gray-50 transition-colors duration-200"
+                disabled={loading}
+              >
+                <div className="flex items-center gap-2">
+                  <h3 className="font-semibold text-black">Monetization</h3>
+                  {filters.monetization && (
+                    <span className="text-xs px-2 py-0.5 bg-black text-white rounded-full">
+                      Selected
+                    </span>
+                  )}
+                </div>
+                {openCategory === 'monetization' ? (
+                  <ChevronUp className="h-5 w-5 text-gray-500 flex-shrink-0" />
+                ) : (
+                  <ChevronDown className="h-5 w-5 text-gray-500 flex-shrink-0" />
                 )}
-              </div>
-              {showCustomInput.monetization && (
-                <div className="flex gap-2 mt-3">
-                  <Input
-                    type="text"
-                    placeholder="Enter custom monetization..."
-                    value={customInputs.monetization}
-                    onChange={(e) => handleCustomInputChange('monetization', e.target.value)}
-                    onKeyPress={(e) => e.key === 'Enter' && handleAddCustom('monetization')}
-                    className="flex-1"
-                  />
-                  <Button onClick={() => handleAddCustom('monetization')} size="sm">
-                    Add
+              </button>
+              {openCategory === 'monetization' && (
+                <div className="px-4 pb-4 pt-2 border-t border-gray-100">
+                  <div className="flex flex-wrap gap-2 mb-2">
+                    {CATEGORIES.monetization.map((model) => (
+                      <Button
+                        key={model}
+                        variant={filters.monetization === model ? 'default' : 'outline'}
+                        size="sm"
+                        onClick={() => handleCategorySelect('monetization', model)}
+                        disabled={loading}
+                      >
+                        {model}
+                      </Button>
+                    ))}
+                    {filters.monetization && !CATEGORIES.monetization.includes(filters.monetization) && (
+                      <Button
+                        variant="default"
+                        size="sm"
+                        onClick={() => handleCategorySelect('monetization', filters.monetization!)}
+                        disabled={loading}
+                      >
+                        {filters.monetization}
+                      </Button>
+                    )}
+                  </div>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => handleToggleCustomInput('monetization')}
+                    className="text-gray-600 hover:text-black mt-2"
+                  >
+                    <Plus className="h-4 w-4 mr-1" />
+                    Add Custom
                   </Button>
+                  {showCustomInput.monetization && (
+                    <div className="flex gap-2 mt-3">
+                      <Input
+                        type="text"
+                        placeholder="Enter custom monetization..."
+                        value={customInputs.monetization}
+                        onChange={(e) => handleCustomInputChange('monetization', e.target.value)}
+                        onKeyPress={(e) => e.key === 'Enter' && handleAddCustom('monetization')}
+                        className="flex-1"
+                      />
+                      <Button onClick={() => handleAddCustom('monetization')} size="sm">
+                        Add
+                      </Button>
+                    </div>
+                  )}
                 </div>
               )}
             </div>
 
             {/* Target Audience */}
-            <div>
-              <div className="flex justify-between items-center mb-3">
-                <h3 className="font-medium">Target Audience</h3>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => handleToggleCustomInput('targetAudience')}
-                  className="text-gray-600 hover:text-black"
-                >
-                  <Plus className="h-4 w-4 mr-1" />
-                  Add
-                </Button>
-              </div>
-              <div className="flex flex-wrap gap-2 mb-2">
-                {CATEGORIES.targetAudience.map((audience) => (
-                  <Button
-                    key={audience}
-                    variant={filters.targetAudience === audience ? 'default' : 'outline'}
-                    size="sm"
-                    onClick={() => handleCategorySelect('targetAudience', audience)}
-                    disabled={loading}
-                  >
-                    {audience}
-                  </Button>
-                ))}
-                {filters.targetAudience && !CATEGORIES.targetAudience.includes(filters.targetAudience) && (
-                  <Button
-                    variant="default"
-                    size="sm"
-                    onClick={() => handleCategorySelect('targetAudience', filters.targetAudience!)}
-                    disabled={loading}
-                  >
-                    {filters.targetAudience}
-                  </Button>
+            <div className="border border-gray-200 rounded-uber-lg overflow-hidden bg-white hover:shadow-uber transition-shadow duration-200">
+              <button
+                onClick={() => handleToggleCategory('targetAudience')}
+                className="w-full px-4 py-3 flex items-center justify-between text-left hover:bg-gray-50 transition-colors duration-200"
+                disabled={loading}
+              >
+                <div className="flex items-center gap-2">
+                  <h3 className="font-semibold text-black">Target Audience</h3>
+                  {filters.targetAudience && (
+                    <span className="text-xs px-2 py-0.5 bg-black text-white rounded-full">
+                      Selected
+                    </span>
+                  )}
+                </div>
+                {openCategory === 'targetAudience' ? (
+                  <ChevronUp className="h-5 w-5 text-gray-500 flex-shrink-0" />
+                ) : (
+                  <ChevronDown className="h-5 w-5 text-gray-500 flex-shrink-0" />
                 )}
-              </div>
-              {showCustomInput.targetAudience && (
-                <div className="flex gap-2 mt-3">
-                  <Input
-                    type="text"
-                    placeholder="Enter custom target audience..."
-                    value={customInputs.targetAudience}
-                    onChange={(e) => handleCustomInputChange('targetAudience', e.target.value)}
-                    onKeyPress={(e) => e.key === 'Enter' && handleAddCustom('targetAudience')}
-                    className="flex-1"
-                  />
-                  <Button onClick={() => handleAddCustom('targetAudience')} size="sm">
-                    Add
+              </button>
+              {openCategory === 'targetAudience' && (
+                <div className="px-4 pb-4 pt-2 border-t border-gray-100">
+                  <div className="flex flex-wrap gap-2 mb-2">
+                    {CATEGORIES.targetAudience.map((audience) => (
+                      <Button
+                        key={audience}
+                        variant={filters.targetAudience === audience ? 'default' : 'outline'}
+                        size="sm"
+                        onClick={() => handleCategorySelect('targetAudience', audience)}
+                        disabled={loading}
+                      >
+                        {audience}
+                      </Button>
+                    ))}
+                    {filters.targetAudience && !CATEGORIES.targetAudience.includes(filters.targetAudience) && (
+                      <Button
+                        variant="default"
+                        size="sm"
+                        onClick={() => handleCategorySelect('targetAudience', filters.targetAudience!)}
+                        disabled={loading}
+                      >
+                        {filters.targetAudience}
+                      </Button>
+                    )}
+                  </div>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => handleToggleCustomInput('targetAudience')}
+                    className="text-gray-600 hover:text-black mt-2"
+                  >
+                    <Plus className="h-4 w-4 mr-1" />
+                    Add Custom
                   </Button>
+                  {showCustomInput.targetAudience && (
+                    <div className="flex gap-2 mt-3">
+                      <Input
+                        type="text"
+                        placeholder="Enter custom target audience..."
+                        value={customInputs.targetAudience}
+                        onChange={(e) => handleCustomInputChange('targetAudience', e.target.value)}
+                        onKeyPress={(e) => e.key === 'Enter' && handleAddCustom('targetAudience')}
+                        className="flex-1"
+                      />
+                      <Button onClick={() => handleAddCustom('targetAudience')} size="sm">
+                        Add
+                      </Button>
+                    </div>
+                  )}
                 </div>
               )}
             </div>
 
             {/* Additional Comments */}
-            <div>
+            <div className="pt-3">
               <h3 className="font-medium mb-3">Additional Comments <span className="text-gray-500 font-normal text-sm">(Optional)</span></h3>
               <Input
                 type="text"
