@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { SearchConfirmationModal } from '@/components/SearchConfirmationModal';
+import { HamburgerMenu } from '@/components/HamburgerMenu';
 import { CATEGORIES, CategoryFilters } from '@/types';
 import toast from 'react-hot-toast';
 
@@ -138,16 +139,20 @@ export default function CategorySearchPage() {
     <div className="min-h-screen bg-gray-50 p-4 md:p-6">
       {/* Header */}
       <div className="max-w-5xl mx-auto mb-4">
-        <div className="flex items-center py-2 gap-4">
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={() => router.push('/dashboard')}
-            className="rounded-full"
-          >
-            <ArrowLeft className="h-5 w-5" />
-          </Button>
+        <div className="flex justify-between items-center py-2">
+          <div className="flex items-center gap-4">
+            <HamburgerMenu />
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => router.push('/dashboard')}
+              className="rounded-full"
+            >
+              <ArrowLeft className="h-5 w-5" />
+            </Button>
+          </div>
           <h1 className="text-2xl font-bold text-black">Search by Category</h1>
+          <div className="w-20"></div> {/* Spacer for centering */}
         </div>
       </div>
 

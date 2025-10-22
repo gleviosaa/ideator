@@ -2,11 +2,12 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { LogOut, Bookmark, Grid3x3, Clock } from 'lucide-react';
+import { Grid3x3 } from 'lucide-react';
 import { createClient } from '@/lib/supabase/client';
 import { SearchBar } from '@/components/SearchBar';
 import { SwipeableCards } from '@/components/SwipeableCards';
 import { SearchConfirmationModal } from '@/components/SearchConfirmationModal';
+import { HamburgerMenu } from '@/components/HamburgerMenu';
 import { Button } from '@/components/ui/button';
 import { Idea } from '@/types';
 import toast from 'react-hot-toast';
@@ -36,11 +37,6 @@ export default function DashboardPage() {
     }
   }, []);
 
-  const handleLogout = async () => {
-    await supabase.auth.signOut();
-    router.push('/');
-    router.refresh();
-  };
 
   const handleSearch = (query: string) => {
     setPendingQuery(query);
@@ -135,36 +131,9 @@ export default function DashboardPage() {
       {/* Header */}
       <div className="max-w-5xl mx-auto mb-4">
         <div className="flex justify-between items-center py-2">
+          <HamburgerMenu />
           <h1 className="text-2xl font-bold text-black">Ideator</h1>
-          <div className="flex gap-3">
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={() => router.push('/history')}
-              className="rounded-full"
-              title="Search History"
-            >
-              <Clock className="h-5 w-5" />
-            </Button>
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={() => router.push('/saved')}
-              className="rounded-full"
-              title="Saved Ideas"
-            >
-              <Bookmark className="h-5 w-5" />
-            </Button>
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={handleLogout}
-              className="rounded-full"
-              title="Logout"
-            >
-              <LogOut className="h-5 w-5" />
-            </Button>
-          </div>
+          <div className="w-10"></div> {/* Spacer for centering */}
         </div>
       </div>
 
