@@ -2,11 +2,12 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter, useParams } from 'next/navigation';
-import { ArrowLeft, Share2, Heart, Loader2 } from 'lucide-react';
+import { ArrowLeft, Share2, Heart, Loader2, FileDown } from 'lucide-react';
 import { createClient } from '@/lib/supabase/client';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Idea } from '@/types';
+import { exportIdeaToPDF } from '@/lib/pdf-export';
 import toast from 'react-hot-toast';
 
 export const dynamic = 'force-dynamic'
@@ -144,6 +145,17 @@ export default function IdeaDetailsPage() {
     }
   };
 
+  const handleExportPDF = () => {
+    if (!idea) return;
+    try {
+      exportIdeaToPDF(idea);
+      toast.success('PDF exported successfully!');
+    } catch (error) {
+      console.error('Error exporting PDF:', error);
+      toast.error('Failed to export PDF');
+    }
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
@@ -198,13 +210,23 @@ export default function IdeaDetailsPage() {
               <Button
                 variant="outline"
                 size="icon"
+                onClick={handleExportPDF}
+                title="Export to PDF"
+              >
+                <FileDown className="h-5 w-5" />
+              </Button>
+              <Button
+                variant="outline"
+                size="icon"
                 onClick={handleShare}
+                title="Share"
               >
                 <Share2 className="h-5 w-5" />
               </Button>
               <Button
                 variant={isSaved ? 'default' : 'outline'}
                 size="icon"
+                title={isSaved ? 'Remove from saved' : 'Save idea'}
                 onClick={handleToggleSave}
               >
                 <Heart className={`h-5 w-5 ${isSaved ? 'fill-current' : ''}`} />

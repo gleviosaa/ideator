@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { motion, useMotionValue, useTransform, PanInfo } from 'framer-motion';
-import { X, Heart, Info } from 'lucide-react';
+import { X, Heart, Info, Clock, Undo2 } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Idea } from '@/types';
@@ -17,8 +17,10 @@ interface SwipeableCardsProps {
 export function SwipeableCards({ ideas, onSwipeComplete, onViewDetails }: SwipeableCardsProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [savedIdeas, setSavedIdeas] = useState<Idea[]>([]);
+  const [maybeLaterIdeas, setMaybeLaterIdeas] = useState<Idea[]>([]);
   const [exitX, setExitX] = useState(0);
-  const [swipeDirection, setSwipeDirection] = useState<'left' | 'right' | null>(null);
+  const [swipeDirection, setSwipeDirection] = useState<'left' | 'right' | 'down' | null>(null);
+  const [swipeHistory, setSwipeHistory] = useState<Array<{action: 'left' | 'right' | 'down', idea: Idea, index: number}>>([]);
 
   const currentIdea = ideas[currentIndex];
   const x = useMotionValue(0);
@@ -57,17 +59,28 @@ export function SwipeableCards({ ideas, onSwipeComplete, onViewDetails }: Swipea
     }
   };
 
-  const handleSwipe = (direction: 'left' | 'right') => {
+  const handleSwipe = (direction: 'left' | 'right' | 'down') => {
     setSwipeDirection(direction);
-    setExitX(direction === 'right' ? 300 : -300);
+
+    if (direction === 'down') {
+      setExitX(0); // No horizontal exit for "maybe later"
+    } else {
+      setExitX(direction === 'right' ? 300 : -300);
+    }
+
+    // Record to history
+    setSwipeHistory(prev => [...prev, { action: direction, idea: currentIdea, index: currentIndex }]);
 
     // Show toast and handle save
     toast.dismiss(); // Dismiss any existing toasts
     if (direction === 'right') {
       setSavedIdeas(prev => [...prev, currentIdea]);
       toast.success('Idea saved!', { icon: '❤️', duration: 1500 });
-    } else {
+    } else if (direction === 'left') {
       toast('Idea skipped', { icon: '👋', duration: 1500 });
+    } else if (direction === 'down') {
+      setMaybeLaterIdeas(prev => [...prev, currentIdea]);
+      toast('Saved for later', { icon: '🕒', duration: 1500 });
     }
 
     setTimeout(() => {
@@ -79,6 +92,28 @@ export function SwipeableCards({ ideas, onSwipeComplete, onViewDetails }: Swipea
         setSwipeDirection(null);
       }
     }, 200);
+  };
+
+  const handleUndo = () => {
+    if (swipeHistory.length === 0 || currentIndex === 0) return;
+
+    const lastAction = swipeHistory[swipeHistory.length - 1];
+
+    // Remove from appropriate array
+    if (lastAction.action === 'right') {
+      setSavedIdeas(prev => prev.filter(idea => idea.id !== lastAction.idea.id));
+    } else if (lastAction.action === 'down') {
+      setMaybeLaterIdeas(prev => prev.filter(idea => idea.id !== lastAction.idea.id));
+    }
+
+    // Go back to previous card
+    setCurrentIndex(prev => prev - 1);
+    setSwipeHistory(prev => prev.slice(0, -1));
+    setExitX(0);
+    setSwipeDirection(null);
+
+    toast.dismiss();
+    toast('Undo successful', { icon: '↩️', duration: 1000 });
   };
 
   if (!currentIdea) {
@@ -167,36 +202,63 @@ export function SwipeableCards({ ideas, onSwipeComplete, onViewDetails }: Swipea
       {/* Swipe hint on first card */}
       {currentIndex === 0 && (
         <div className="text-center text-gray-500 text-sm px-4">
-          Swipe right to save, left to skip
+          Save, skip, or mark for later
         </div>
       )}
 
       {/* Action buttons */}
-      <div className="flex justify-center gap-8 pt-2">
-        <Button
-          size="icon"
-          variant="outline"
-          className={`h-16 w-16 rounded-full border-2 shadow-uber transition-all duration-200 ${
-            swipeDirection === 'left'
-              ? 'border-red-500 bg-red-500 scale-110'
-              : 'border-red-500 hover:bg-red-500/10'
-          }`}
-          onClick={() => handleSwipe('left')}
-        >
-          <X className={`h-8 w-8 ${swipeDirection === 'left' ? 'text-white' : 'text-red-500'}`} />
-        </Button>
-        <Button
-          size="icon"
-          variant="outline"
-          className={`h-16 w-16 rounded-full border-2 shadow-uber transition-all duration-200 ${
-            swipeDirection === 'right'
-              ? 'border-green-500 bg-green-500 scale-110'
-              : 'border-green-500 hover:bg-green-500/10'
-          }`}
-          onClick={() => handleSwipe('right')}
-        >
-          <Heart className={`h-8 w-8 ${swipeDirection === 'right' ? 'text-white' : 'text-green-500'}`} />
-        </Button>
+      <div className="flex flex-col items-center gap-4">
+        <div className="flex justify-center gap-6">
+          <Button
+            size="icon"
+            variant="outline"
+            className={`h-16 w-16 rounded-full border-2 shadow-uber transition-all duration-200 ${
+              swipeDirection === 'left'
+                ? 'border-red-500 bg-red-500 scale-110'
+                : 'border-red-500 hover:bg-red-500/10'
+            }`}
+            onClick={() => handleSwipe('left')}
+          >
+            <X className={`h-8 w-8 ${swipeDirection === 'left' ? 'text-white' : 'text-red-500'}`} />
+          </Button>
+          <Button
+            size="icon"
+            variant="outline"
+            className={`h-16 w-16 rounded-full border-2 shadow-uber transition-all duration-200 ${
+              swipeDirection === 'down'
+                ? 'border-yellow-500 bg-yellow-500 scale-110'
+                : 'border-yellow-500 hover:bg-yellow-500/10'
+            }`}
+            onClick={() => handleSwipe('down')}
+          >
+            <Clock className={`h-8 w-8 ${swipeDirection === 'down' ? 'text-white' : 'text-yellow-500'}`} />
+          </Button>
+          <Button
+            size="icon"
+            variant="outline"
+            className={`h-16 w-16 rounded-full border-2 shadow-uber transition-all duration-200 ${
+              swipeDirection === 'right'
+                ? 'border-green-500 bg-green-500 scale-110'
+                : 'border-green-500 hover:bg-green-500/10'
+            }`}
+            onClick={() => handleSwipe('right')}
+          >
+            <Heart className={`h-8 w-8 ${swipeDirection === 'right' ? 'text-white' : 'text-green-500'}`} />
+          </Button>
+        </div>
+
+        {/* Undo button */}
+        {swipeHistory.length > 0 && currentIndex > 0 && (
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={handleUndo}
+            className="text-gray-600 hover:text-black"
+          >
+            <Undo2 className="h-4 w-4 mr-2" />
+            Undo
+          </Button>
+        )}
       </div>
     </div>
   );
