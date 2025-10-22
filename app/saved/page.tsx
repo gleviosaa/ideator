@@ -379,14 +379,12 @@ export default function SavedIdeasPage() {
             <ArrowLeft className="mr-2 h-4 w-4" />
             Back to Dashboard
           </Button>
-          <div className="flex justify-between items-center mb-4">
-            <div>
-              <h1 className="text-3xl font-bold text-black">Saved Ideas</h1>
-              <p className="text-gray-600 mt-2">
-                {filteredIdeas.length} {filteredIdeas.length === 1 ? 'idea' : 'ideas'}
-                {searchQuery || selectedFolder || selectedTags.length > 0 ? ' (filtered)' : ''}
-              </p>
-            </div>
+          <div className="mb-4">
+            <h1 className="text-3xl font-bold text-black mb-2">Saved Ideas</h1>
+            <p className="text-gray-600 mb-3">
+              {filteredIdeas.length} {filteredIdeas.length === 1 ? 'idea' : 'ideas'}
+              {searchQuery || selectedFolder || selectedTags.length > 0 ? ' (filtered)' : ''}
+            </p>
             <div className="flex gap-2">
               <Button variant="outline" onClick={handleExportAll} disabled={filteredIdeas.length === 0}>
                 <FileDown className="mr-2 h-4 w-4" />
@@ -691,7 +689,7 @@ export default function SavedIdeasPage() {
                   </Badge>
                 ))}
                 {tags.length === 0 && (
-                  <p className="text-sm text-gray-500">No tags yet</p>
+                  <p className="text-sm text-gray-600">No tags yet</p>
                 )}
               </div>
             </div>

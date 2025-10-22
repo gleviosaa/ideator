@@ -20,6 +20,7 @@ export default function DashboardPage() {
   const [viewMode, setViewMode] = useState<ViewMode>('search');
   const [ideas, setIdeas] = useState<Idea[]>([]);
   const [savedIdeas, setSavedIdeas] = useState<Idea[]>([]);
+  const [maybeLaterIdeas, setMaybeLaterIdeas] = useState<Idea[]>([]);
   const [loading, setLoading] = useState(false);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [pendingQuery, setPendingQuery] = useState<string>('');
@@ -92,8 +93,9 @@ export default function DashboardPage() {
   };
 
 
-  const handleSwipeComplete = async (likedIdeas: Idea[]) => {
+  const handleSwipeComplete = async (likedIdeas: Idea[], maybeIdeas: Idea[]) => {
     setSavedIdeas(likedIdeas);
+    setMaybeLaterIdeas(maybeIdeas);
 
     // Save liked ideas to database
     if (likedIdeas.length > 0) {
@@ -217,17 +219,41 @@ export default function DashboardPage() {
             </div>
 
             {savedIdeas.length > 0 && (
-              <div className="grid gap-4">
-                {savedIdeas.map((idea) => (
-                  <div
-                    key={idea.id}
-                    className="p-6 bg-white border border-gray-100 rounded-uber-lg hover:shadow-uber-lg transition-all duration-200 cursor-pointer"
-                    onClick={() => handleViewDetails(idea)}
-                  >
-                    <h3 className="font-semibold text-xl mb-2 text-black">{idea.title}</h3>
-                    <p className="text-gray-600">{idea.description}</p>
-                  </div>
-                ))}
+              <div className="space-y-4">
+                <h3 className="text-xl font-semibold text-black">Saved Ideas</h3>
+                <div className="grid gap-4">
+                  {savedIdeas.map((idea) => (
+                    <div
+                      key={idea.id}
+                      className="p-6 bg-white border border-gray-100 rounded-uber-lg hover:shadow-uber-lg transition-all duration-200 cursor-pointer"
+                      onClick={() => handleViewDetails(idea)}
+                    >
+                      <h3 className="font-semibold text-xl mb-2 text-black">{idea.title}</h3>
+                      <p className="text-gray-600">{idea.description}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {maybeLaterIdeas.length > 0 && (
+              <div className="space-y-4">
+                <div className="flex items-center gap-2">
+                  <h3 className="text-xl font-semibold text-black">Ideas to Review Later</h3>
+                  <span className="text-sm text-gray-500">(Not saved - for this session only)</span>
+                </div>
+                <div className="grid gap-4">
+                  {maybeLaterIdeas.map((idea) => (
+                    <div
+                      key={idea.id}
+                      className="p-6 bg-yellow-50 border border-yellow-200 rounded-uber-lg hover:shadow-uber-lg transition-all duration-200 cursor-pointer"
+                      onClick={() => handleViewDetails(idea)}
+                    >
+                      <h3 className="font-semibold text-xl mb-2 text-black">{idea.title}</h3>
+                      <p className="text-gray-700">{idea.description}</p>
+                    </div>
+                  ))}
+                </div>
               </div>
             )}
 

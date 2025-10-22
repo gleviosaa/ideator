@@ -10,7 +10,7 @@ import toast from 'react-hot-toast';
 
 interface SwipeableCardsProps {
   ideas: Idea[];
-  onSwipeComplete: (savedIdeas: Idea[]) => void;
+  onSwipeComplete: (savedIdeas: Idea[], maybeLaterIdeas: Idea[]) => void;
   onViewDetails: (idea: Idea) => void;
 }
 
@@ -49,7 +49,8 @@ export function SwipeableCards({ ideas, onSwipeComplete, onViewDetails }: Swipea
       setTimeout(() => {
         if (currentIndex === ideas.length - 1) {
           // All cards swiped
-          onSwipeComplete(direction === 'right' ? [...savedIdeas, currentIdea] : savedIdeas);
+          const finalSaved = direction === 'right' ? [...savedIdeas, currentIdea] : savedIdeas;
+          onSwipeComplete(finalSaved, maybeLaterIdeas);
         } else {
           setCurrentIndex(prev => prev + 1);
           setExitX(0);
@@ -85,7 +86,9 @@ export function SwipeableCards({ ideas, onSwipeComplete, onViewDetails }: Swipea
 
     setTimeout(() => {
       if (currentIndex === ideas.length - 1) {
-        onSwipeComplete(direction === 'right' ? [...savedIdeas, currentIdea] : savedIdeas);
+        const finalSaved = direction === 'right' ? [...savedIdeas, currentIdea] : savedIdeas;
+        const finalMaybeLater = direction === 'down' ? [...maybeLaterIdeas, currentIdea] : maybeLaterIdeas;
+        onSwipeComplete(finalSaved, finalMaybeLater);
       } else {
         setCurrentIndex(prev => prev + 1);
         setExitX(0);
@@ -209,42 +212,52 @@ export function SwipeableCards({ ideas, onSwipeComplete, onViewDetails }: Swipea
       {/* Action buttons */}
       <div className="flex flex-col items-center gap-4">
         <div className="flex justify-center gap-6">
-          <Button
-            size="icon"
-            variant="outline"
-            className={`h-16 w-16 rounded-full border-2 shadow-uber transition-all duration-200 ${
-              swipeDirection === 'left'
-                ? 'border-red-500 bg-red-500 scale-110'
-                : 'border-red-500 hover:bg-red-500/10'
-            }`}
-            onClick={() => handleSwipe('left')}
-          >
-            <X className={`h-8 w-8 ${swipeDirection === 'left' ? 'text-white' : 'text-red-500'}`} />
-          </Button>
-          <Button
-            size="icon"
-            variant="outline"
-            className={`h-16 w-16 rounded-full border-2 shadow-uber transition-all duration-200 ${
-              swipeDirection === 'down'
-                ? 'border-yellow-500 bg-yellow-500 scale-110'
-                : 'border-yellow-500 hover:bg-yellow-500/10'
-            }`}
-            onClick={() => handleSwipe('down')}
-          >
-            <Clock className={`h-8 w-8 ${swipeDirection === 'down' ? 'text-white' : 'text-yellow-500'}`} />
-          </Button>
-          <Button
-            size="icon"
-            variant="outline"
-            className={`h-16 w-16 rounded-full border-2 shadow-uber transition-all duration-200 ${
-              swipeDirection === 'right'
-                ? 'border-green-500 bg-green-500 scale-110'
-                : 'border-green-500 hover:bg-green-500/10'
-            }`}
-            onClick={() => handleSwipe('right')}
-          >
-            <Heart className={`h-8 w-8 ${swipeDirection === 'right' ? 'text-white' : 'text-green-500'}`} />
-          </Button>
+          <div className="flex flex-col items-center gap-2">
+            <Button
+              size="icon"
+              variant="outline"
+              className={`h-16 w-16 rounded-full border-2 shadow-uber transition-all duration-200 ${
+                swipeDirection === 'left'
+                  ? 'border-red-500 bg-red-500 scale-110'
+                  : 'border-red-500 hover:bg-red-500/10'
+              }`}
+              onClick={() => handleSwipe('left')}
+            >
+              <X className={`h-8 w-8 ${swipeDirection === 'left' ? 'text-white' : 'text-red-500'}`} />
+            </Button>
+            <span className="text-xs text-gray-600 font-medium">Skip</span>
+          </div>
+          <div className="flex flex-col items-center gap-2">
+            <Button
+              size="icon"
+              variant="outline"
+              className={`h-16 w-16 rounded-full border-2 shadow-uber transition-all duration-200 ${
+                swipeDirection === 'down'
+                  ? 'border-yellow-500 bg-yellow-500 scale-110'
+                  : 'border-yellow-500 hover:bg-yellow-500/10'
+              }`}
+              onClick={() => handleSwipe('down')}
+              title="Mark for review later - not saved but kept for this session"
+            >
+              <Clock className={`h-8 w-8 ${swipeDirection === 'down' ? 'text-white' : 'text-yellow-500'}`} />
+            </Button>
+            <span className="text-xs text-gray-600 font-medium">Review Later</span>
+          </div>
+          <div className="flex flex-col items-center gap-2">
+            <Button
+              size="icon"
+              variant="outline"
+              className={`h-16 w-16 rounded-full border-2 shadow-uber transition-all duration-200 ${
+                swipeDirection === 'right'
+                  ? 'border-green-500 bg-green-500 scale-110'
+                  : 'border-green-500 hover:bg-green-500/10'
+              }`}
+              onClick={() => handleSwipe('right')}
+            >
+              <Heart className={`h-8 w-8 ${swipeDirection === 'right' ? 'text-white' : 'text-green-500'}`} />
+            </Button>
+            <span className="text-xs text-gray-600 font-medium">Save</span>
+          </div>
         </div>
 
         {/* Undo button */}
