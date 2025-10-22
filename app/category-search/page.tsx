@@ -168,13 +168,16 @@ export default function CategorySearchPage() {
             Select your preferences
           </h2>
           <p className="text-base text-gray-600 max-w-2xl mx-auto">
-            Choose categories that interest you to get personalized app ideas
+            Choose at least one option from any category to get personalized app ideas
           </p>
         </div>
 
         <Card>
           <CardHeader>
             <CardTitle>Filter Options</CardTitle>
+            <p className="text-sm text-gray-600 mt-2">
+              Select at least one option from any category below to generate ideas
+            </p>
           </CardHeader>
           <CardContent className="space-y-3">
             {/* Technology */}
