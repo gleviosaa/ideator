@@ -5,58 +5,162 @@ import { ChevronDown, ChevronUp, ArrowLeft } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useRouter } from 'next/navigation';
 
+interface BulletItem {
+  title: string;
+  description?: string;
+}
+
+interface NumberedItem {
+  title: string;
+  description: string;
+}
+
+interface FaqAnswer {
+  text: string;
+  bullets?: BulletItem[];
+  numbered?: NumberedItem[];
+  footer?: string;
+}
+
+interface Faq {
+  question: string;
+  answer: FaqAnswer;
+}
+
 export default function AboutPage() {
   const router = useRouter();
   const [openFaq, setOpenFaq] = useState<number | null>(0);
 
-  const faqs = [
+  const faqs: Faq[] = [
     {
       question: "What is Ideator?",
-      answer: "Ideator is an AI-powered web application that helps you discover and save creative project ideas. Whether you're looking for your next app idea, business venture, or creative project, Ideator generates personalized suggestions based on your interests and preferences."
+      answer: {
+        text: "Ideator is an AI-powered web application that helps you discover and save creative project ideas. Whether you're looking for your next app idea, business venture, or creative project, Ideator generates personalized suggestions based on your interests and preferences."
+      }
     },
     {
       question: "How do I search for ideas?",
-      answer: "There are two ways to search:\n\n1. **Free-text Search**: Simply type what you're interested in (e.g., 'fitness app ideas' or 'sustainable business ideas') on the main search page.\n\n2. **Category Search**: Use the category search to browse ideas by specific categories, technologies, complexity levels, and time investment. This helps you find ideas that match your skills and available time."
+      answer: {
+        text: "There are two ways to search:",
+        numbered: [
+          { title: "Free-text Search", description: "Simply type what you're interested in (e.g., 'fitness app ideas' or 'sustainable business ideas') on the main search page." },
+          { title: "Category Search", description: "Use the category search to browse ideas by specific categories, technologies, complexity levels, and time investment. This helps you find ideas that match your skills and available time." }
+        ]
+      }
     },
     {
       question: "How does the swipeable card interface work?",
-      answer: "After searching, you'll see ideas one at a time in a card format. You have three options:\n\n• **Swipe/Tap Left (Skip)**: Pass on this idea and move to the next one\n• **Tap Center (Review Later)**: Mark the idea to review later in this session (not saved to your account)\n• **Swipe/Tap Right (Save)**: Save this idea to your collection\n\nYou can swipe the cards with your finger/mouse or use the buttons below the card."
+      answer: {
+        text: "After searching, you'll see ideas one at a time in a card format. You have three options:",
+        bullets: [
+          { title: "Swipe/Tap Left (Skip)", description: "Pass on this idea and move to the next one" },
+          { title: "Tap Center (Review Later)", description: "Mark the idea to review later in this session (not saved to your account)" },
+          { title: "Swipe/Tap Right (Save)", description: "Save this idea to your collection" }
+        ],
+        footer: "You can swipe the cards with your finger/mouse or use the buttons below the card."
+      }
     },
     {
       question: "What happens to 'Review Later' ideas?",
-      answer: "'Review Later' ideas are temporarily stored for the current session only. They appear in a yellow-highlighted section after you finish swiping, allowing you to review them before deciding whether to save them permanently. These ideas are NOT saved to your account and will disappear when you close your browser or start a new search."
+      answer: {
+        text: "'Review Later' ideas are temporarily stored for the current session only. They appear in a yellow-highlighted section after you finish swiping, allowing you to review them before deciding whether to save them permanently. These ideas are NOT saved to your account and will disappear when you close your browser or start a new search."
+      }
     },
     {
       question: "How can I organize my saved ideas?",
-      answer: "You can organize your saved ideas using:\n\n• **Folders**: Create custom folders (e.g., 'Mobile Apps', 'Side Projects') and assign ideas to them\n• **Tags**: Add multiple tags to each idea for flexible categorization (e.g., 'urgent', 'high-priority', 'learning')\n• **Search**: Use the search bar on the Saved Ideas page to quickly find specific ideas\n• **Filters**: Filter your ideas by folder or tags to focus on what matters"
+      answer: {
+        text: "You can organize your saved ideas using:",
+        bullets: [
+          { title: "Folders", description: "Create custom folders (e.g., 'Mobile Apps', 'Side Projects') and assign ideas to them" },
+          { title: "Tags", description: "Add multiple tags to each idea for flexible categorization (e.g., 'urgent', 'high-priority', 'learning')" },
+          { title: "Search", description: "Use the search bar on the Saved Ideas page to quickly find specific ideas" },
+          { title: "Filters", description: "Filter your ideas by folder or tags to focus on what matters" }
+        ]
+      }
     },
     {
       question: "Can I export my saved ideas?",
-      answer: "Yes! You can export your ideas as PDF files:\n\n• **Single Export**: Click the download icon on any individual idea card to export just that idea\n• **Bulk Export**: Use the 'Export PDF' button at the top of the Saved Ideas page to export all your saved ideas (or filtered ideas) at once\n\nThe PDF includes all details: title, description, technology, complexity, time to build, and monetization strategies."
+      answer: {
+        text: "Yes! You can export your ideas as PDF files:",
+        bullets: [
+          { title: "Single Export", description: "Click the download icon on any individual idea card to export just that idea" },
+          { title: "Bulk Export", description: "Use the 'Export PDF' button at the top of the Saved Ideas page to export all your saved ideas (or filtered ideas) at once" }
+        ],
+        footer: "The PDF includes all details: title, description, technology, complexity, time to build, and monetization strategies."
+      }
     },
     {
       question: "How do I view detailed information about an idea?",
-      answer: "Click on any idea card to open a detailed view. This shows:\n\n• Full description\n• Technology stack\n• Complexity level\n• Estimated time to build\n• Monetization strategies\n• Whether the idea is already saved to your collection\n\nYou can also save or unsave ideas from the detail view."
+      answer: {
+        text: "Click on any idea card to open a detailed view. This shows:",
+        bullets: [
+          { title: "Full description" },
+          { title: "Technology stack" },
+          { title: "Complexity level" },
+          { title: "Estimated time to build" },
+          { title: "Monetization strategies" },
+          { title: "Whether the idea is already saved to your collection" }
+        ],
+        footer: "You can also save or unsave ideas from the detail view."
+      }
     },
     {
       question: "Can I undo a swipe decision?",
-      answer: "Yes! While swiping through ideas, you'll see an 'Undo' button that lets you go back to the previous card and reverse your decision. This is helpful if you accidentally skip an interesting idea."
+      answer: {
+        text: "Yes! While swiping through ideas, you'll see an 'Undo' button that lets you go back to the previous card and reverse your decision. This is helpful if you accidentally skip an interesting idea."
+      }
     },
     {
       question: "Where can I see my search history?",
-      answer: "Click on 'History' in the menu to view all your past searches. Each history entry shows:\n\n• Your search query\n• When you searched\n• Number of ideas generated\n• A 'Search Again' button to quickly repeat the same search"
+      answer: {
+        text: "Click on 'History' in the menu to view all your past searches. Each history entry shows:",
+        bullets: [
+          { title: "Your search query" },
+          { title: "When you searched" },
+          { title: "Number of ideas generated" },
+          { title: "A 'Search Again' button to quickly repeat the same search" }
+        ]
+      }
     },
     {
       question: "How does the AI generate ideas?",
-      answer: "Ideator uses Google's Gemini AI to generate creative, relevant project ideas based on your search criteria. The AI considers:\n\n• Your search query or selected categories\n• Technology preferences\n• Complexity level\n• Time commitment\n• Current trends and real-world applications\n\nEach idea includes practical details to help you evaluate its feasibility."
+      answer: {
+        text: "Ideator uses Google's Gemini AI to generate creative, relevant project ideas based on your search criteria. The AI considers:",
+        bullets: [
+          { title: "Your search query or selected categories" },
+          { title: "Technology preferences" },
+          { title: "Complexity level" },
+          { title: "Time commitment" },
+          { title: "Current trends and real-world applications" }
+        ],
+        footer: "Each idea includes practical details to help you evaluate its feasibility."
+      }
     },
     {
       question: "Do I need an account to use Ideator?",
-      answer: "Yes, you need to create a free account to save ideas and access your personalized collection. Creating an account allows you to:\n\n• Save unlimited ideas\n• Organize ideas with folders and tags\n• Access your ideas from any device\n• View your search history\n• Export ideas as PDFs"
+      answer: {
+        text: "Yes, you need to create a free account to save ideas and access your personalized collection. Creating an account allows you to:",
+        bullets: [
+          { title: "Save unlimited ideas" },
+          { title: "Organize ideas with folders and tags" },
+          { title: "Access your ideas from any device" },
+          { title: "View your search history" },
+          { title: "Export ideas as PDFs" }
+        ]
+      }
     },
     {
       question: "Is my data secure?",
-      answer: "Yes! Ideator uses Supabase for authentication and data storage, which provides:\n\n• Secure authentication\n• Row-level security (you can only access your own data)\n• Encrypted data transmission\n• Industry-standard security practices\n\nYour ideas and searches are private and only visible to you."
+      answer: {
+        text: "Yes! Ideator uses Supabase for authentication and data storage, which provides:",
+        bullets: [
+          { title: "Secure authentication" },
+          { title: "Row-level security (you can only access your own data)" },
+          { title: "Encrypted data transmission" },
+          { title: "Industry-standard security practices" }
+        ],
+        footer: "Your ideas and searches are private and only visible to you."
+      }
     }
   ];
 
@@ -106,9 +210,38 @@ export default function AboutPage() {
               </button>
               {openFaq === index && (
                 <div className="px-6 pb-4 pt-2">
-                  <p className="text-gray-700 whitespace-pre-line leading-relaxed">
-                    {faq.answer}
-                  </p>
+                  <div className="text-gray-700 leading-relaxed space-y-3">
+                    <p>{faq.answer.text}</p>
+
+                    {faq.answer.numbered && (
+                      <ol className="list-decimal list-inside space-y-2 ml-2">
+                        {faq.answer.numbered.map((item, i) => (
+                          <li key={i} className="pl-2">
+                            <span className="font-semibold text-black">{item.title}:</span>{' '}
+                            {item.description}
+                          </li>
+                        ))}
+                      </ol>
+                    )}
+
+                    {faq.answer.bullets && (
+                      <ul className="space-y-2 ml-2">
+                        {faq.answer.bullets.map((item, i) => (
+                          <li key={i} className="flex gap-2">
+                            <span className="text-black mt-1.5">•</span>
+                            <span>
+                              <span className="font-semibold text-black">{item.title}</span>
+                              {item.description && <span>: {item.description}</span>}
+                            </span>
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+
+                    {faq.answer.footer && (
+                      <p className="pt-1">{faq.answer.footer}</p>
+                    )}
+                  </div>
                 </div>
               )}
             </div>
