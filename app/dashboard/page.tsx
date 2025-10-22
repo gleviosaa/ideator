@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { LogOut, Bookmark, Grid3x3 } from 'lucide-react';
+import { LogOut, Bookmark, Grid3x3, Clock } from 'lucide-react';
 import { createClient } from '@/lib/supabase/client';
 import { SearchBar } from '@/components/SearchBar';
 import { SwipeableCards } from '@/components/SwipeableCards';
@@ -56,10 +56,33 @@ export default function DashboardPage() {
       setIdeas(data.ideas);
       setViewMode('swiping');
       toast.success('Ideas generated!');
+
+      // Save to search history
+      await saveToHistory(query, 'free_text', null, data.ideas);
     } catch (error) {
       toast.error('Failed to generate ideas. Please try again.');
     } finally {
       setLoading(false);
+    }
+  };
+
+  const saveToHistory = async (searchQuery: string | null, searchMode: 'free_text' | 'category_select', filters: any, ideas: Idea[]) => {
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user || !ideas || ideas.length === 0) return;
+
+      const ideaIds = ideas.map(idea => idea.id);
+
+      await supabase.from('search_history').insert({
+        user_id: user.id,
+        search_query: searchQuery,
+        search_mode: searchMode,
+        filters: filters,
+        idea_ids: ideaIds,
+      });
+    } catch (error) {
+      console.error('Error saving to history:', error);
+      // Don't show error to user, it's not critical
     }
   };
 
@@ -108,8 +131,18 @@ export default function DashboardPage() {
             <Button
               variant="ghost"
               size="icon"
+              onClick={() => router.push('/history')}
+              className="rounded-full"
+              title="Search History"
+            >
+              <Clock className="h-5 w-5" />
+            </Button>
+            <Button
+              variant="ghost"
+              size="icon"
               onClick={() => router.push('/saved')}
               className="rounded-full"
+              title="Saved Ideas"
             >
               <Bookmark className="h-5 w-5" />
             </Button>
@@ -118,6 +151,7 @@ export default function DashboardPage() {
               size="icon"
               onClick={handleLogout}
               className="rounded-full"
+              title="Logout"
             >
               <LogOut className="h-5 w-5" />
             </Button>

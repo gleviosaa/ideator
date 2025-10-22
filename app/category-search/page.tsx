@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { ArrowLeft } from 'lucide-react';
+import { createClient } from '@/lib/supabase/client';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { CATEGORIES, CategoryFilters } from '@/types';
@@ -14,6 +15,7 @@ export default function CategorySearchPage() {
   const [filters, setFilters] = useState<CategoryFilters>({});
   const [loading, setLoading] = useState(false);
   const router = useRouter();
+  const supabase = createClient();
 
   const handleCategorySelect = (category: keyof CategoryFilters, value: string) => {
     setFilters(prev => ({
@@ -37,6 +39,9 @@ export default function CategorySearchPage() {
 
       const data = await response.json();
 
+      // Save to search history
+      await saveToHistory(filters, data.ideas);
+
       // Store ideas in sessionStorage to pass to dashboard
       sessionStorage.setItem('generatedIdeas', JSON.stringify(data.ideas));
 
@@ -46,6 +51,26 @@ export default function CategorySearchPage() {
       toast.error('Failed to generate ideas. Please try again.');
     } finally {
       setLoading(false);
+    }
+  };
+
+  const saveToHistory = async (filters: CategoryFilters, ideas: any[]) => {
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user || !ideas || ideas.length === 0) return;
+
+      const ideaIds = ideas.map(idea => idea.id);
+
+      await supabase.from('search_history').insert({
+        user_id: user.id,
+        search_query: null,
+        search_mode: 'category_select',
+        filters: filters,
+        idea_ids: ideaIds,
+      });
+    } catch (error) {
+      console.error('Error saving to history:', error);
+      // Don't show error to user, it's not critical
     }
   };
 
