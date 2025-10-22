@@ -9,6 +9,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { SearchConfirmationModal } from '@/components/SearchConfirmationModal';
 import { HamburgerMenu } from '@/components/HamburgerMenu';
+import { IdeatorLogo } from '@/components/IdeatorLogo';
 import { CATEGORIES, CategoryFilters } from '@/types';
 import toast from 'react-hot-toast';
 
@@ -156,7 +157,7 @@ export default function CategorySearchPage() {
               <ArrowLeft className="h-5 w-5" />
             </Button>
           </div>
-          <h1 className="text-xl md:text-2xl font-bold text-black whitespace-nowrap">Category Search</h1>
+          <IdeatorLogo size="md" />
           <div className="w-20"></div> {/* Spacer for centering */}
         </div>
       </div>

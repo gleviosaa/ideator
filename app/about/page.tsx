@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { ChevronDown, ChevronUp, ArrowLeft } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { IdeatorLogo } from '@/components/IdeatorLogo';
 import { useRouter } from 'next/navigation';
 
 interface BulletItem {
@@ -181,8 +182,11 @@ export default function AboutPage() {
             <ArrowLeft className="mr-2 h-4 w-4" />
             Back
           </Button>
-          <h1 className="text-4xl font-bold text-black mb-3">About Ideator</h1>
-          <p className="text-lg text-gray-600">
+          <div className="flex justify-center mb-6">
+            <IdeatorLogo size="lg" />
+          </div>
+          <h1 className="text-4xl font-bold text-black mb-3 text-center">About Ideator</h1>
+          <p className="text-lg text-gray-600 text-center">
             Your AI-powered companion for discovering and organizing creative project ideas
           </p>
         </div>

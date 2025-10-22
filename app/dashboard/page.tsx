@@ -8,6 +8,7 @@ import { SearchBar } from '@/components/SearchBar';
 import { SwipeableCards } from '@/components/SwipeableCards';
 import { SearchConfirmationModal } from '@/components/SearchConfirmationModal';
 import { HamburgerMenu } from '@/components/HamburgerMenu';
+import { IdeatorLogo } from '@/components/IdeatorLogo';
 import { Button } from '@/components/ui/button';
 import { Idea } from '@/types';
 import toast from 'react-hot-toast';
@@ -134,7 +135,7 @@ export default function DashboardPage() {
       <div className="max-w-5xl mx-auto mb-4">
         <div className="flex justify-between items-center py-2">
           <HamburgerMenu />
-          <h1 className="text-2xl font-bold text-black">Ideator</h1>
+          <IdeatorLogo size="md" />
           <div className="w-10"></div> {/* Spacer for centering */}
         </div>
       </div>

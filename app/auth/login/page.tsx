@@ -7,6 +7,7 @@ import { createClient } from '@/lib/supabase/client'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
+import { IdeatorLogo } from '@/components/IdeatorLogo'
 import toast from 'react-hot-toast'
 
 export const dynamic = 'force-dynamic'
@@ -45,8 +46,11 @@ export default function LoginPage() {
   return (
     <div className="flex min-h-screen items-center justify-center p-4 bg-gray-50">
       <Card className="w-full max-w-md shadow-uber-lg">
-        <CardHeader className="space-y-1">
-          <CardTitle className="text-2xl font-bold">Login</CardTitle>
+        <CardHeader className="space-y-4">
+          <div className="flex justify-center">
+            <IdeatorLogo size="lg" />
+          </div>
+          <CardTitle className="text-2xl font-bold text-center">Login</CardTitle>
           <CardDescription>
             Enter your email and password to access your account
           </CardDescription>
