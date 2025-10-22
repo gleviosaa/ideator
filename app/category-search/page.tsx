@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, Plus } from 'lucide-react';
 import { createClient } from '@/lib/supabase/client';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -18,6 +18,18 @@ export default function CategorySearchPage() {
   const [additionalComments, setAdditionalComments] = useState('');
   const [loading, setLoading] = useState(false);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [customInputs, setCustomInputs] = useState<Record<string, string>>({
+    technology: '',
+    context: '',
+    monetization: '',
+    targetAudience: '',
+  });
+  const [showCustomInput, setShowCustomInput] = useState<Record<string, boolean>>({
+    technology: false,
+    context: false,
+    monetization: false,
+    targetAudience: false,
+  });
   const router = useRouter();
   const supabase = createClient();
 
@@ -26,6 +38,39 @@ export default function CategorySearchPage() {
       ...prev,
       [category]: prev[category] === value ? undefined : value,
     }));
+  };
+
+  const handleToggleCustomInput = (category: string) => {
+    setShowCustomInput(prev => ({
+      ...prev,
+      [category]: !prev[category],
+    }));
+  };
+
+  const handleCustomInputChange = (category: string, value: string) => {
+    setCustomInputs(prev => ({
+      ...prev,
+      [category]: value,
+    }));
+  };
+
+  const handleAddCustom = (category: keyof CategoryFilters) => {
+    const customValue = customInputs[category].trim();
+    if (customValue) {
+      setFilters(prev => ({
+        ...prev,
+        [category]: customValue,
+      }));
+      setCustomInputs(prev => ({
+        ...prev,
+        [category]: '',
+      }));
+      setShowCustomInput(prev => ({
+        ...prev,
+        [category]: false,
+      }));
+      toast.success(`Added custom ${category}: ${customValue}`);
+    }
   };
 
   const handleSubmit = () => {
@@ -124,8 +169,19 @@ export default function CategorySearchPage() {
           <CardContent className="space-y-6">
             {/* Technology */}
             <div>
-              <h3 className="font-medium mb-3">Technology/Platform</h3>
-              <div className="flex flex-wrap gap-2">
+              <div className="flex justify-between items-center mb-3">
+                <h3 className="font-medium">Technology/Platform</h3>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => handleToggleCustomInput('technology')}
+                  className="text-gray-600 hover:text-black"
+                >
+                  <Plus className="h-4 w-4 mr-1" />
+                  Add Custom
+                </Button>
+              </div>
+              <div className="flex flex-wrap gap-2 mb-2">
                 {CATEGORIES.technology.map((tech) => (
                   <Button
                     key={tech}
@@ -138,12 +194,38 @@ export default function CategorySearchPage() {
                   </Button>
                 ))}
               </div>
+              {showCustomInput.technology && (
+                <div className="flex gap-2 mt-3">
+                  <Input
+                    type="text"
+                    placeholder="Enter custom technology..."
+                    value={customInputs.technology}
+                    onChange={(e) => handleCustomInputChange('technology', e.target.value)}
+                    onKeyPress={(e) => e.key === 'Enter' && handleAddCustom('technology')}
+                    className="flex-1"
+                  />
+                  <Button onClick={() => handleAddCustom('technology')} size="sm">
+                    Add
+                  </Button>
+                </div>
+              )}
             </div>
 
             {/* Context */}
             <div>
-              <h3 className="font-medium mb-3">Context/Category</h3>
-              <div className="flex flex-wrap gap-2">
+              <div className="flex justify-between items-center mb-3">
+                <h3 className="font-medium">Context</h3>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => handleToggleCustomInput('context')}
+                  className="text-gray-600 hover:text-black"
+                >
+                  <Plus className="h-4 w-4 mr-1" />
+                  Add Custom
+                </Button>
+              </div>
+              <div className="flex flex-wrap gap-2 mb-2">
                 {CATEGORIES.context.map((ctx) => (
                   <Button
                     key={ctx}
@@ -156,12 +238,38 @@ export default function CategorySearchPage() {
                   </Button>
                 ))}
               </div>
+              {showCustomInput.context && (
+                <div className="flex gap-2 mt-3">
+                  <Input
+                    type="text"
+                    placeholder="Enter custom context..."
+                    value={customInputs.context}
+                    onChange={(e) => handleCustomInputChange('context', e.target.value)}
+                    onKeyPress={(e) => e.key === 'Enter' && handleAddCustom('context')}
+                    className="flex-1"
+                  />
+                  <Button onClick={() => handleAddCustom('context')} size="sm">
+                    Add
+                  </Button>
+                </div>
+              )}
             </div>
 
             {/* Monetization */}
             <div>
-              <h3 className="font-medium mb-3">Monetization</h3>
-              <div className="flex flex-wrap gap-2">
+              <div className="flex justify-between items-center mb-3">
+                <h3 className="font-medium">Monetization</h3>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => handleToggleCustomInput('monetization')}
+                  className="text-gray-600 hover:text-black"
+                >
+                  <Plus className="h-4 w-4 mr-1" />
+                  Add Custom
+                </Button>
+              </div>
+              <div className="flex flex-wrap gap-2 mb-2">
                 {CATEGORIES.monetization.map((model) => (
                   <Button
                     key={model}
@@ -174,12 +282,38 @@ export default function CategorySearchPage() {
                   </Button>
                 ))}
               </div>
+              {showCustomInput.monetization && (
+                <div className="flex gap-2 mt-3">
+                  <Input
+                    type="text"
+                    placeholder="Enter custom monetization..."
+                    value={customInputs.monetization}
+                    onChange={(e) => handleCustomInputChange('monetization', e.target.value)}
+                    onKeyPress={(e) => e.key === 'Enter' && handleAddCustom('monetization')}
+                    className="flex-1"
+                  />
+                  <Button onClick={() => handleAddCustom('monetization')} size="sm">
+                    Add
+                  </Button>
+                </div>
+              )}
             </div>
 
             {/* Target Audience */}
             <div>
-              <h3 className="font-medium mb-3">Target Audience</h3>
-              <div className="flex flex-wrap gap-2">
+              <div className="flex justify-between items-center mb-3">
+                <h3 className="font-medium">Target Audience</h3>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => handleToggleCustomInput('targetAudience')}
+                  className="text-gray-600 hover:text-black"
+                >
+                  <Plus className="h-4 w-4 mr-1" />
+                  Add Custom
+                </Button>
+              </div>
+              <div className="flex flex-wrap gap-2 mb-2">
                 {CATEGORIES.targetAudience.map((audience) => (
                   <Button
                     key={audience}
@@ -192,6 +326,21 @@ export default function CategorySearchPage() {
                   </Button>
                 ))}
               </div>
+              {showCustomInput.targetAudience && (
+                <div className="flex gap-2 mt-3">
+                  <Input
+                    type="text"
+                    placeholder="Enter custom target audience..."
+                    value={customInputs.targetAudience}
+                    onChange={(e) => handleCustomInputChange('targetAudience', e.target.value)}
+                    onKeyPress={(e) => e.key === 'Enter' && handleAddCustom('targetAudience')}
+                    className="flex-1"
+                  />
+                  <Button onClick={() => handleAddCustom('targetAudience')} size="sm">
+                    Add
+                  </Button>
+                </div>
+              )}
             </div>
 
             {/* Additional Comments */}
