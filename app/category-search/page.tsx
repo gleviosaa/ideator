@@ -151,7 +151,7 @@ export default function CategorySearchPage() {
               <ArrowLeft className="h-5 w-5" />
             </Button>
           </div>
-          <h1 className="text-2xl font-bold text-black">Search by Category</h1>
+          <h1 className="text-xl md:text-2xl font-bold text-black whitespace-nowrap">Category Search</h1>
           <div className="w-20"></div> {/* Spacer for centering */}
         </div>
       </div>
