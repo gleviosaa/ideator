@@ -23,7 +23,7 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json();
-    const { query, filters, mode } = body;
+    const { query, filters, mode, additionalComments } = body;
 
     if (!query && !filters) {
       return NextResponse.json({ error: 'Query or filters required' }, { status: 400 });
@@ -39,10 +39,13 @@ export async function POST(request: NextRequest) {
     if (filters) {
       prompt += `Filters:\n`;
       if (filters.technology) prompt += `- Technology/Platform: ${filters.technology}\n`;
-      if (filters.complexity) prompt += `- Complexity Level: ${filters.complexity}\n`;
-      if (filters.timeToBuild) prompt += `- Time to Build: ${filters.timeToBuild}\n`;
+      if (filters.context) prompt += `- Context/Category: ${filters.context}\n`;
       if (filters.monetization) prompt += `- Monetization: ${filters.monetization}\n`;
       if (filters.targetAudience) prompt += `- Target Audience: ${filters.targetAudience}\n`;
+    }
+
+    if (additionalComments) {
+      prompt += `\nAdditional Requirements/Comments: ${additionalComments}\n`;
     }
 
     prompt += `\nFor each idea, provide:

@@ -6,6 +6,7 @@ import { ArrowLeft } from 'lucide-react';
 import { createClient } from '@/lib/supabase/client';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
 import { CATEGORIES, CategoryFilters } from '@/types';
 import toast from 'react-hot-toast';
 
@@ -13,6 +14,7 @@ export const dynamic = 'force-dynamic'
 
 export default function CategorySearchPage() {
   const [filters, setFilters] = useState<CategoryFilters>({});
+  const [additionalComments, setAdditionalComments] = useState('');
   const [loading, setLoading] = useState(false);
   const router = useRouter();
   const supabase = createClient();
@@ -30,7 +32,11 @@ export default function CategorySearchPage() {
       const response = await fetch('/api/generate-ideas', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ filters, mode: 'category_select' }),
+        body: JSON.stringify({
+          filters,
+          mode: 'category_select',
+          additionalComments: additionalComments.trim() || undefined
+        }),
       });
 
       if (!response.ok) {
@@ -179,6 +185,22 @@ export default function CategorySearchPage() {
                   </Button>
                 ))}
               </div>
+            </div>
+
+            {/* Additional Comments */}
+            <div>
+              <h3 className="font-medium mb-3">Additional Comments <span className="text-gray-500 font-normal text-sm">(Optional)</span></h3>
+              <Input
+                type="text"
+                placeholder="Add any specific requirements, features, or details you'd like to include..."
+                value={additionalComments}
+                onChange={(e) => setAdditionalComments(e.target.value)}
+                disabled={loading}
+                className="w-full"
+              />
+              <p className="text-sm text-gray-600 mt-2">
+                Provide additional context to refine your app ideas
+              </p>
             </div>
 
             <Button
