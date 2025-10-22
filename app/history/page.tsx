@@ -6,6 +6,7 @@ import { ArrowLeft, Search, Grid3x3, Clock, Trash2 } from 'lucide-react';
 import { createClient } from '@/lib/supabase/client';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { IdeatorLogo } from '@/components/IdeatorLogo';
 import { Idea } from '@/types';
 import toast from 'react-hot-toast';
 
@@ -139,14 +140,16 @@ export default function SearchHistoryPage() {
       <div className="max-w-4xl mx-auto">
         {/* Header */}
         <div className="mb-8">
-          <Button
-            variant="ghost"
-            onClick={() => router.push('/dashboard')}
-            className="mb-4"
-          >
-            <ArrowLeft className="mr-2 h-4 w-4" />
-            Back to Dashboard
-          </Button>
+          <div className="flex items-center gap-4 mb-4">
+            <Button
+              variant="ghost"
+              onClick={() => router.push('/dashboard')}
+            >
+              <ArrowLeft className="mr-2 h-4 w-4" />
+              Back to Dashboard
+            </Button>
+            <IdeatorLogo size="sm" />
+          </div>
           <h1 className="text-3xl font-bold text-black">Search History</h1>
           <p className="text-gray-600 mt-2">
             {history.length} {history.length === 1 ? 'search' : 'searches'} in your history

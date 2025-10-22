@@ -9,6 +9,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Input } from '@/components/ui/input';
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Badge } from '@/components/ui/badge';
+import { IdeatorLogo } from '@/components/IdeatorLogo';
 import { Idea } from '@/types';
 import { exportMultipleIdeasToPDF } from '@/lib/pdf-export';
 import toast from 'react-hot-toast';
@@ -371,14 +372,16 @@ export default function SavedIdeasPage() {
       <div className="max-w-6xl mx-auto">
         {/* Header */}
         <div className="mb-8">
-          <Button
-            variant="ghost"
-            onClick={() => router.push('/dashboard')}
-            className="mb-4"
-          >
-            <ArrowLeft className="mr-2 h-4 w-4" />
-            Back to Dashboard
-          </Button>
+          <div className="flex items-center gap-4 mb-4">
+            <Button
+              variant="ghost"
+              onClick={() => router.push('/dashboard')}
+            >
+              <ArrowLeft className="mr-2 h-4 w-4" />
+              Back to Dashboard
+            </Button>
+            <IdeatorLogo size="sm" />
+          </div>
           <div className="mb-4">
             <h1 className="text-3xl font-bold text-black mb-2">Saved Ideas</h1>
             <p className="text-gray-600 mb-3">
