@@ -146,8 +146,8 @@ export default function IdeaDetailsPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <Loader2 className="h-8 w-8 animate-spin text-gray-400" />
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <Loader2 className="h-8 w-8 animate-spin text-black" />
       </div>
     );
   }
@@ -157,7 +157,7 @@ export default function IdeaDetailsPage() {
   }
 
   return (
-    <div className="min-h-screen p-4 md:p-8">
+    <div className="min-h-screen bg-gray-50 p-4 md:p-8">
       <div className="max-w-4xl mx-auto">
         {/* Header */}
         <div className="mb-8">
@@ -172,21 +172,21 @@ export default function IdeaDetailsPage() {
 
           <div className="flex justify-between items-start gap-4">
             <div className="flex-1">
-              <h1 className="text-3xl md:text-4xl font-bold mb-4">{idea.title}</h1>
+              <h1 className="text-3xl md:text-4xl font-bold mb-4 text-black">{idea.title}</h1>
               {idea.technology && (
                 <div className="flex gap-2 flex-wrap mb-4">
                   {idea.technology && (
-                    <span className="text-sm px-3 py-1 bg-gray-800 rounded">
+                    <span className="text-sm px-3 py-1.5 bg-black text-white rounded-uber font-medium">
                       {idea.technology}
                     </span>
                   )}
                   {idea.complexity && (
-                    <span className="text-sm px-3 py-1 bg-gray-800 rounded">
+                    <span className="text-sm px-3 py-1.5 bg-black text-white rounded-uber font-medium">
                       {idea.complexity}
                     </span>
                   )}
                   {idea.time_to_build && (
-                    <span className="text-sm px-3 py-1 bg-gray-800 rounded">
+                    <span className="text-sm px-3 py-1.5 bg-black text-white rounded-uber font-medium">
                       {idea.time_to_build}
                     </span>
                   )}
@@ -219,19 +219,19 @@ export default function IdeaDetailsPage() {
             <CardTitle>Description</CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-lg text-gray-300">{idea.description}</p>
+            <p className="text-lg text-gray-700 leading-relaxed">{idea.description}</p>
 
             {(idea.monetization || idea.target_audience) && (
-              <div className="mt-4 pt-4 border-t border-gray-800 space-y-2">
+              <div className="mt-4 pt-4 border-t border-gray-200 space-y-2">
                 {idea.monetization && (
-                  <div>
-                    <span className="text-gray-400">Monetization:</span>{' '}
+                  <div className="text-gray-700">
+                    <span className="font-medium text-gray-900">Monetization:</span>{' '}
                     <span>{idea.monetization}</span>
                   </div>
                 )}
                 {idea.target_audience && (
-                  <div>
-                    <span className="text-gray-400">Target Audience:</span>{' '}
+                  <div className="text-gray-700">
+                    <span className="font-medium text-gray-900">Target Audience:</span>{' '}
                     <span>{idea.target_audience}</span>
                   </div>
                 )}
@@ -242,7 +242,7 @@ export default function IdeaDetailsPage() {
 
         {detailsLoading ? (
           <div className="flex justify-center py-12">
-            <Loader2 className="h-8 w-8 animate-spin text-gray-400" />
+            <Loader2 className="h-8 w-8 animate-spin text-black" />
           </div>
         ) : (
           <>
@@ -256,13 +256,13 @@ export default function IdeaDetailsPage() {
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <ol className="space-y-3">
+                  <ol className="space-y-4">
                     {details.implementation_steps.map((step, index) => (
                       <li key={index} className="flex gap-3">
-                        <span className="flex-shrink-0 w-6 h-6 rounded-full bg-gray-800 flex items-center justify-center text-sm font-medium">
+                        <span className="flex-shrink-0 w-7 h-7 rounded-full bg-black text-white flex items-center justify-center text-sm font-semibold">
                           {index + 1}
                         </span>
-                        <span className="text-gray-300">{step}</span>
+                        <span className="text-gray-700 leading-relaxed pt-0.5">{step}</span>
                       </li>
                     ))}
                   </ol>
@@ -284,7 +284,7 @@ export default function IdeaDetailsPage() {
                     {details.tech_stack.map((tech, index) => (
                       <span
                         key={index}
-                        className="px-3 py-1.5 bg-gray-800 rounded-lg text-sm"
+                        className="px-3 py-1.5 bg-black text-white rounded-uber text-sm font-medium"
                       >
                         {tech}
                       </span>
@@ -304,11 +304,11 @@ export default function IdeaDetailsPage() {
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
-                  <ul className="space-y-2">
+                  <ul className="space-y-3">
                     {details.suggestions.map((suggestion, index) => (
-                      <li key={index} className="flex gap-2 text-gray-300">
-                        <span className="text-gray-500">•</span>
-                        <span>{suggestion}</span>
+                      <li key={index} className="flex gap-3 text-gray-700">
+                        <span className="text-black font-bold">•</span>
+                        <span className="leading-relaxed">{suggestion}</span>
                       </li>
                     ))}
                   </ul>
