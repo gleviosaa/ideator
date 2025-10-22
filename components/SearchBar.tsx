@@ -29,7 +29,7 @@ export function SearchBar({ onSearch, loading }: SearchBarProps) {
           placeholder="Describe your app idea or enter comma-separated tags..."
           value={query}
           onChange={(e) => setQuery(e.target.value)}
-          className="pl-12 pr-4 py-6 text-lg"
+          className="pl-12 pr-4 py-6 text-base"
           disabled={loading}
         />
       </div>
