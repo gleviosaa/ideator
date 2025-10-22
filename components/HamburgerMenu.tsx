@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Menu, X, Clock, Heart, LogOut } from 'lucide-react';
+import { Menu, X, Clock, Heart, LogOut, Info } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { createClient } from '@/lib/supabase/client';
 import toast from 'react-hot-toast';
@@ -36,6 +36,14 @@ export function HamburgerMenu() {
       label: 'Past Searches',
       onClick: () => {
         router.push('/history');
+        setIsOpen(false);
+      }
+    },
+    {
+      icon: Info,
+      label: 'About',
+      onClick: () => {
+        router.push('/about');
         setIsOpen(false);
       }
     },
