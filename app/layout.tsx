@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Toaster } from 'react-hot-toast';
+import { LanguageProvider } from '@/contexts/LanguageContext';
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -24,8 +25,9 @@ export default function RootLayout({
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
       </head>
       <body className="antialiased">
-        {children}
-        <Toaster
+        <LanguageProvider>
+          {children}
+          <Toaster
           position="top-center"
           toastOptions={{
             style: {
@@ -50,6 +52,7 @@ export default function RootLayout({
           reverseOrder={false}
           gutter={8}
         />
+        </LanguageProvider>
       </body>
     </html>
   );

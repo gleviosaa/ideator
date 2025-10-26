@@ -2,30 +2,37 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Menu, X, Clock, Heart, LogOut, Info } from 'lucide-react';
+import { Menu, X, Clock, Heart, LogOut, Info, Languages } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { createClient } from '@/lib/supabase/client';
+import { useLanguage } from '@/contexts/LanguageContext';
 import toast from 'react-hot-toast';
 
 export function HamburgerMenu() {
   const [isOpen, setIsOpen] = useState(false);
   const router = useRouter();
   const supabase = createClient();
+  const { language, setLanguage, t } = useLanguage();
 
   const handleLogout = async () => {
     try {
       await supabase.auth.signOut();
-      toast.success('Logged out successfully');
+      toast.success(t('toast.loggedOut'));
       router.push('/auth/login');
     } catch (error) {
-      toast.error('Failed to log out');
+      toast.error(t('toast.failed').replace('{action}', 'log out'));
     }
+  };
+
+  const toggleLanguage = () => {
+    setLanguage(language === 'en' ? 'tr' : 'en');
+    setIsOpen(false);
   };
 
   const menuItems = [
     {
       icon: Heart,
-      label: 'Saved Ideas',
+      label: t('menu.savedIdeas'),
       onClick: () => {
         router.push('/saved');
         setIsOpen(false);
@@ -33,7 +40,7 @@ export function HamburgerMenu() {
     },
     {
       icon: Clock,
-      label: 'Past Searches',
+      label: t('menu.pastSearches'),
       onClick: () => {
         router.push('/history');
         setIsOpen(false);
@@ -41,15 +48,20 @@ export function HamburgerMenu() {
     },
     {
       icon: Info,
-      label: 'About',
+      label: t('menu.about'),
       onClick: () => {
         router.push('/about');
         setIsOpen(false);
       }
     },
     {
+      icon: Languages,
+      label: `${t('menu.language')}: ${language === 'en' ? 'English' : 'Türkçe'}`,
+      onClick: toggleLanguage
+    },
+    {
       icon: LogOut,
-      label: 'Log Out',
+      label: t('auth.logout'),
       onClick: () => {
         handleLogout();
         setIsOpen(false);
