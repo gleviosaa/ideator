@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Menu, X, Clock, Heart, LogOut, Info, Languages } from 'lucide-react';
+import { Menu, X, Clock, Heart, LogOut, Info } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { createClient } from '@/lib/supabase/client';
 import { useLanguage } from '@/contexts/LanguageContext';
@@ -53,11 +53,6 @@ export function HamburgerMenu() {
         router.push('/about');
         setIsOpen(false);
       }
-    },
-    {
-      icon: Languages,
-      label: `${t('menu.language')}: ${language === 'en' ? 'English' : 'Türkçe'}`,
-      onClick: toggleLanguage
     },
     {
       icon: LogOut,
@@ -112,6 +107,30 @@ export function HamburgerMenu() {
 
         {/* Menu Items */}
         <nav className="p-4">
+          {/* Language Toggle */}
+          <div className="mb-4 px-4 py-4 bg-gray-50 rounded-uber">
+            <div className="flex items-center justify-between">
+              <span className="text-base font-medium text-gray-700">{t('menu.language')}</span>
+              <button
+                onClick={toggleLanguage}
+                className="relative inline-flex h-8 w-16 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-black focus:ring-offset-2"
+                style={{ backgroundColor: language === 'en' ? '#e5e7eb' : '#000000' }}
+              >
+                <span
+                  className={`inline-block h-6 w-6 transform rounded-full bg-white transition-transform ${
+                    language === 'en' ? 'translate-x-1' : 'translate-x-9'
+                  }`}
+                />
+                <span className={`absolute left-2 text-xs font-semibold ${language === 'en' ? 'text-black' : 'text-gray-400'}`}>
+                  EN
+                </span>
+                <span className={`absolute right-2 text-xs font-semibold ${language === 'tr' ? 'text-white' : 'text-gray-400'}`}>
+                  TR
+                </span>
+              </button>
+            </div>
+          </div>
+
           <ul className="space-y-2">
             {menuItems.map((item) => {
               const Icon = item.icon;
