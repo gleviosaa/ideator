@@ -11,7 +11,6 @@ import { HamburgerMenu } from '@/components/HamburgerMenu';
 import { IdeatorLogo } from '@/components/IdeatorLogo';
 import { Button } from '@/components/ui/button';
 import { Idea } from '@/types';
-import { useLanguage } from '@/contexts/LanguageContext';
 import toast from 'react-hot-toast';
 
 export const dynamic = 'force-dynamic'
@@ -28,7 +27,6 @@ export default function DashboardPage() {
   const [pendingQuery, setPendingQuery] = useState<string>('');
   const router = useRouter();
   const supabase = createClient();
-  const { t } = useLanguage();
 
   // Check for generated ideas from category search page
   useEffect(() => {
@@ -64,12 +62,12 @@ export default function DashboardPage() {
       const data = await response.json();
       setIdeas(data.ideas);
       setViewMode('swiping');
-      toast.success(t('toast.ideasGenerated'));
+      toast.success('Ideas generated!');
 
       // Save to search history
       await saveToHistory(pendingQuery, 'free_text', null, data.ideas);
     } catch (error) {
-      toast.error(t('toast.failed').replace('{action}', 'generate ideas'));
+      toast.error('Failed to generate ideas. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -111,8 +109,7 @@ export default function DashboardPage() {
           }));
 
           await supabase.from('saved_ideas').insert(savedIdeaRecords);
-          const count = likedIdeas.length;
-          toast.success(count === 1 ? t('dashboard.savedCount').replace('{count}', String(count)) : t('dashboard.savedCountPlural').replace('{count}', String(count)));
+          toast.success(`Saved ${likedIdeas.length} idea(s)!`);
         }
       } catch (error) {
         console.error('Failed to save ideas:', error);
@@ -149,10 +146,10 @@ export default function DashboardPage() {
           <div className="space-y-6">
             <div className="text-center space-y-3 py-4">
               <h2 className="text-2xl md:text-3xl font-bold text-black leading-tight">
-                {t('dashboard.title')}
+                What kind of app do you want to build?
               </h2>
               <p className="text-base text-gray-600 max-w-2xl mx-auto">
-                {t('dashboard.subtitle')}
+                Describe your idea or select categories
               </p>
             </div>
 
@@ -163,7 +160,7 @@ export default function DashboardPage() {
                 <div className="w-full border-t border-gray-200"></div>
               </div>
               <div className="relative flex justify-center text-sm">
-                <span className="px-4 bg-gray-50 text-gray-500">{t('dashboard.or')}</span>
+                <span className="px-4 bg-gray-50 text-gray-500">or</span>
               </div>
             </div>
 
@@ -174,7 +171,7 @@ export default function DashboardPage() {
               onClick={() => router.push('/category-search')}
             >
               <Grid3x3 className="mr-2 h-5 w-5" />
-              {t('dashboard.searchByCategory')}
+              Search by Category
             </Button>
           </div>
         )}
@@ -187,9 +184,9 @@ export default function DashboardPage() {
                   <div className="w-16 h-16 border-4 border-gray-200 border-t-black rounded-full animate-spin"></div>
                 </div>
                 <div className="text-center space-y-2">
-                  <h3 className="text-xl font-semibold text-black">{t('dashboard.generatingIdeas')}</h3>
+                  <h3 className="text-xl font-semibold text-black">Generating Ideas...</h3>
                   <p className="text-gray-600">
-                    {t('dashboard.generatingMessage')}
+                    Our AI is crafting personalized app ideas just for you. This may take a few moments.
                   </p>
                 </div>
               </div>
@@ -212,21 +209,19 @@ export default function DashboardPage() {
             <div className="text-center space-y-4 py-8">
               <h2 className="text-3xl md:text-4xl font-bold text-black">
                 {savedIdeas.length > 0
-                  ? (savedIdeas.length === 1
-                    ? t('dashboard.savedCount').replace('{count}', String(savedIdeas.length))
-                    : t('dashboard.savedCountPlural').replace('{count}', String(savedIdeas.length)))
-                  : t('dashboard.noIdeasSaved')}
+                  ? `You saved ${savedIdeas.length} idea${savedIdeas.length > 1 ? 's' : ''}!`
+                  : 'No ideas saved'}
               </h2>
               <p className="text-lg text-gray-600">
                 {savedIdeas.length > 0
-                  ? t('dashboard.viewSaved')
-                  : t('dashboard.startNewSearch')}
+                  ? 'View your saved ideas or start a new search'
+                  : 'Start a new search to discover more ideas'}
               </p>
             </div>
 
             {savedIdeas.length > 0 && (
               <div className="space-y-4">
-                <h3 className="text-xl font-semibold text-black">{t('saved.title')}</h3>
+                <h3 className="text-xl font-semibold text-black">Saved Ideas</h3>
                 <div className="grid gap-4">
                   {savedIdeas.map((idea) => (
                     <div
@@ -245,8 +240,8 @@ export default function DashboardPage() {
             {maybeLaterIdeas.length > 0 && (
               <div className="space-y-4">
                 <div className="flex items-center gap-2">
-                  <h3 className="text-xl font-semibold text-black">{t('dashboard.reviewLater')}</h3>
-                  <span className="text-sm text-gray-500">{t('dashboard.reviewLaterNote')}</span>
+                  <h3 className="text-xl font-semibold text-black">Ideas to Review Later</h3>
+                  <span className="text-sm text-gray-500">(Not saved - for this session only)</span>
                 </div>
                 <div className="grid gap-4">
                   {maybeLaterIdeas.map((idea) => (
@@ -264,10 +259,10 @@ export default function DashboardPage() {
             )}
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center pt-4">
-              <Button onClick={handleNewSearch} size="lg">{t('dashboard.newSearch')}</Button>
+              <Button onClick={handleNewSearch} size="lg">New Search</Button>
               {savedIdeas.length > 0 && (
                 <Button variant="outline" size="lg" onClick={() => router.push('/saved')}>
-                  {t('dashboard.viewAllSaved')}
+                  View All Saved Ideas
                 </Button>
               )}
             </div>
