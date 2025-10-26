@@ -212,6 +212,7 @@ const translations = {
       targetAudience: 'Target Audience',
       saveIdea: 'Save Idea',
       unsaveIdea: 'Unsave Idea',
+      viewDetails: 'View Details',
     },
 
     // Toast messages
@@ -388,6 +389,7 @@ const translations = {
       targetAudience: 'Hedef Kitle',
       saveIdea: 'Fikri Kaydet',
       unsaveIdea: 'Kaydı Kaldır',
+      viewDetails: 'Detayları Gör',
     },
 
     // Toast messages

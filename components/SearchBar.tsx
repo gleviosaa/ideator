@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { Search } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 interface SearchBarProps {
   onSearch: (query: string) => void;
@@ -12,6 +13,7 @@ interface SearchBarProps {
 
 export function SearchBar({ onSearch, loading }: SearchBarProps) {
   const [query, setQuery] = useState('');
+  const { t } = useLanguage();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -26,7 +28,7 @@ export function SearchBar({ onSearch, loading }: SearchBarProps) {
         <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
         <Input
           type="text"
-          placeholder="Describe your app idea..."
+          placeholder={t('dashboard.searchPlaceholder')}
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           className="pl-12 pr-4 py-6 text-base"
@@ -39,7 +41,7 @@ export function SearchBar({ onSearch, loading }: SearchBarProps) {
         size="lg"
         disabled={loading || !query.trim()}
       >
-        {loading ? 'Searching...' : 'Search for Ideas'}
+        {loading ? t('dashboard.generatingIdeas') : t('dashboard.searchButton')}
       </Button>
     </form>
   );

@@ -6,6 +6,7 @@ import { X, Heart, Info, Clock, Undo2 } from 'lucide-react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Idea } from '@/types';
+import { useLanguage } from '@/contexts/LanguageContext';
 import toast from 'react-hot-toast';
 
 interface SwipeableCardsProps {
@@ -21,6 +22,7 @@ export function SwipeableCards({ ideas, onSwipeComplete, onViewDetails }: Swipea
   const [exitX, setExitX] = useState(0);
   const [swipeDirection, setSwipeDirection] = useState<'left' | 'right' | 'down' | null>(null);
   const [swipeHistory, setSwipeHistory] = useState<Array<{action: 'left' | 'right' | 'down', idea: Idea, index: number}>>([]);
+  const { t } = useLanguage();
 
   const currentIdea = ideas[currentIndex];
   const x = useMotionValue(0);
@@ -40,9 +42,9 @@ export function SwipeableCards({ ideas, onSwipeComplete, onViewDetails }: Swipea
       toast.dismiss(); // Dismiss any existing toasts
       if (direction === 'right') {
         setSavedIdeas(prev => [...prev, currentIdea]);
-        toast.success('Idea saved!', { icon: '❤️', duration: 1500 });
+        toast.success(t('toast.ideaSaved'), { icon: '❤️', duration: 1500 });
       } else {
-        toast('Idea skipped', { icon: '👋', duration: 1500 });
+        toast(t('toast.ideaSkipped'), { icon: '👋', duration: 1500 });
       }
 
       // Move to next card
@@ -76,12 +78,12 @@ export function SwipeableCards({ ideas, onSwipeComplete, onViewDetails }: Swipea
     toast.dismiss(); // Dismiss any existing toasts
     if (direction === 'right') {
       setSavedIdeas(prev => [...prev, currentIdea]);
-      toast.success('Idea saved!', { icon: '❤️', duration: 1500 });
+      toast.success(t('toast.ideaSaved'), { icon: '❤️', duration: 1500 });
     } else if (direction === 'left') {
-      toast('Idea skipped', { icon: '👋', duration: 1500 });
+      toast(t('toast.ideaSkipped'), { icon: '👋', duration: 1500 });
     } else if (direction === 'down') {
       setMaybeLaterIdeas(prev => [...prev, currentIdea]);
-      toast('Saved for later', { icon: '🕒', duration: 1500 });
+      toast(t('toast.savedForLater'), { icon: '🕒', duration: 1500 });
     }
 
     setTimeout(() => {
@@ -116,7 +118,7 @@ export function SwipeableCards({ ideas, onSwipeComplete, onViewDetails }: Swipea
     setSwipeDirection(null);
 
     toast.dismiss();
-    toast('Undo successful', { icon: '↩️', duration: 1000 });
+    toast(t('toast.undoSuccessful'), { icon: '↩️', duration: 1000 });
   };
 
   if (!currentIdea) {
@@ -171,19 +173,19 @@ export function SwipeableCards({ ideas, onSwipeComplete, onViewDetails }: Swipea
             <div className="space-y-2 text-sm text-gray-700">
               {currentIdea.time_to_build && (
                 <div>
-                  <span className="text-gray-600 font-medium">Time to Build:</span>{' '}
+                  <span className="text-gray-600 font-medium">{t('ideaDetail.timeToBuild')}:</span>{' '}
                   <span className="text-gray-800">{currentIdea.time_to_build}</span>
                 </div>
               )}
               {currentIdea.monetization && (
                 <div>
-                  <span className="text-gray-600 font-medium">Monetization:</span>{' '}
+                  <span className="text-gray-600 font-medium">{t('ideaDetail.monetization')}:</span>{' '}
                   <span className="text-gray-800">{currentIdea.monetization}</span>
                 </div>
               )}
               {currentIdea.target_audience && (
                 <div>
-                  <span className="text-gray-600 font-medium">Target Audience:</span>{' '}
+                  <span className="text-gray-600 font-medium">{t('ideaDetail.targetAudience')}:</span>{' '}
                   <span className="text-gray-800">{currentIdea.target_audience}</span>
                 </div>
               )}
@@ -195,7 +197,7 @@ export function SwipeableCards({ ideas, onSwipeComplete, onViewDetails }: Swipea
               onClick={() => onViewDetails(currentIdea)}
             >
               <Info className="mr-2 h-4 w-4" />
-              View Details
+              {t('ideaDetail.viewDetails') || 'View Details'}
             </Button>
           </CardContent>
         </Card>
@@ -205,7 +207,7 @@ export function SwipeableCards({ ideas, onSwipeComplete, onViewDetails }: Swipea
       {/* Swipe hint on first card */}
       {currentIndex === 0 && (
         <div className="text-center text-gray-700 text-sm px-4 font-medium">
-          👆 Tap buttons or swipe left/right on the card
+          {t('dashboard.swipeHint')}
         </div>
       )}
 
@@ -225,7 +227,7 @@ export function SwipeableCards({ ideas, onSwipeComplete, onViewDetails }: Swipea
             >
               <X className={`h-8 w-8 ${swipeDirection === 'left' ? 'text-white' : 'text-red-500'}`} />
             </Button>
-            <span className="text-xs text-gray-600 font-medium">Skip</span>
+            <span className="text-xs text-gray-600 font-medium">{t('dashboard.skip')}</span>
           </div>
           <div className="flex flex-col items-center gap-2">
             <Button
@@ -237,11 +239,11 @@ export function SwipeableCards({ ideas, onSwipeComplete, onViewDetails }: Swipea
                   : 'border-yellow-500 hover:bg-yellow-500/10'
               }`}
               onClick={() => handleSwipe('down')}
-              title="Mark for review later - not saved but kept for this session"
+              title={t('dashboard.reviewLaterNote')}
             >
               <Clock className={`h-8 w-8 ${swipeDirection === 'down' ? 'text-white' : 'text-yellow-500'}`} />
             </Button>
-            <span className="text-xs text-gray-600 font-medium">Review Later</span>
+            <span className="text-xs text-gray-600 font-medium">{t('dashboard.reviewLaterBtn')}</span>
           </div>
           <div className="flex flex-col items-center gap-2">
             <Button
@@ -256,7 +258,7 @@ export function SwipeableCards({ ideas, onSwipeComplete, onViewDetails }: Swipea
             >
               <Heart className={`h-8 w-8 ${swipeDirection === 'right' ? 'text-white' : 'text-green-500'}`} />
             </Button>
-            <span className="text-xs text-gray-600 font-medium">Save</span>
+            <span className="text-xs text-gray-600 font-medium">{t('dashboard.saveBtn')}</span>
           </div>
         </div>
 
@@ -269,7 +271,7 @@ export function SwipeableCards({ ideas, onSwipeComplete, onViewDetails }: Swipea
             className="text-gray-600 hover:text-black"
           >
             <Undo2 className="h-4 w-4 mr-2" />
-            Undo
+            {t('common.back') || 'Undo'}
           </Button>
         )}
       </div>
