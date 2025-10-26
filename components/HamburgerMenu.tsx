@@ -26,7 +26,7 @@ export function HamburgerMenu() {
 
   const toggleLanguage = () => {
     setLanguage(language === 'en' ? 'tr' : 'en');
-    setIsOpen(false);
+    // Keep menu open when toggling language
   };
 
   const menuItems = [

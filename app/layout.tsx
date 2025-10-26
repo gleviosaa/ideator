@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Toaster } from 'react-hot-toast';
 import { LanguageProvider } from '@/contexts/LanguageContext';
+import { PageLoadingIndicator } from '@/components/PageLoadingIndicator';
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -26,6 +27,7 @@ export default function RootLayout({
       </head>
       <body className="antialiased">
         <LanguageProvider>
+          <PageLoadingIndicator />
           {children}
           <Toaster
           position="top-center"

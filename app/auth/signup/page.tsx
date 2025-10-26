@@ -20,7 +20,11 @@ export default function SignupPage() {
   const [loading, setLoading] = useState(false)
   const router = useRouter()
   const supabase = createClient()
-  const { t } = useLanguage()
+  const { t, language, setLanguage } = useLanguage()
+
+  const toggleLanguage = () => {
+    setLanguage(language === 'en' ? 'tr' : 'en')
+  }
 
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -63,8 +67,30 @@ export default function SignupPage() {
     <div className="flex min-h-screen items-center justify-center p-4 bg-gray-50">
       <Card className="w-full max-w-md shadow-uber-lg">
         <CardHeader className="space-y-4">
-          <div className="flex justify-center">
-            <IdeatorLogo size="lg" />
+          <div className="flex justify-between items-start">
+            <div className="flex-1"></div>
+            <div className="flex justify-center flex-1">
+              <IdeatorLogo size="lg" />
+            </div>
+            <div className="flex-1 flex justify-end">
+              <button
+                onClick={toggleLanguage}
+                className="relative inline-flex h-7 w-14 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-black focus:ring-offset-2"
+                style={{ backgroundColor: language === 'en' ? '#e5e7eb' : '#000000' }}
+              >
+                <span
+                  className={`inline-block h-5 w-5 transform rounded-full bg-white transition-transform ${
+                    language === 'en' ? 'translate-x-1' : 'translate-x-8'
+                  }`}
+                />
+                <span className={`absolute left-1.5 text-xs font-semibold ${language === 'en' ? 'text-black' : 'text-gray-400'}`}>
+                  EN
+                </span>
+                <span className={`absolute right-1.5 text-xs font-semibold ${language === 'tr' ? 'text-white' : 'text-gray-400'}`}>
+                  TR
+                </span>
+              </button>
+            </div>
           </div>
           <CardTitle className="text-2xl font-bold text-center">{t('auth.createAccount')}</CardTitle>
           <CardDescription>
