@@ -10,8 +10,7 @@ export const metadata: Metadata = {
   viewport: {
     width: "device-width",
     initialScale: 1,
-    maximumScale: 1,
-    userScalable: false,
+    minimumScale: 1,
   },
 };
 
@@ -23,9 +22,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
       </head>
-      <body className="antialiased">
+      <body className="antialiased overflow-x-hidden">
         <LanguageProvider>
           <PageLoadingIndicator />
           {children}
