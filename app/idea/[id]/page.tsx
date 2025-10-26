@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Idea } from '@/types';
 import { exportIdeaToPDF } from '@/lib/pdf-export';
+import { useLanguage } from '@/contexts/LanguageContext';
 import toast from 'react-hot-toast';
 
 export const dynamic = 'force-dynamic'
@@ -26,6 +27,7 @@ export default function IdeaDetailsPage() {
   const router = useRouter();
   const params = useParams();
   const supabase = createClient();
+  const { t, language } = useLanguage();
   const ideaId = params.id as string;
 
   useEffect(() => {
@@ -71,7 +73,7 @@ export default function IdeaDetailsPage() {
       const response = await fetch('/api/idea-details', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ ideaId }),
+        body: JSON.stringify({ ideaId, language }),
       });
 
       if (!response.ok) throw new Error('Failed to fetch details');
@@ -80,7 +82,7 @@ export default function IdeaDetailsPage() {
       setDetails(data);
     } catch (error) {
       console.error('Error fetching details:', error);
-      toast.error('Failed to load detailed information');
+      toast.error(t('toast.failed').replace('{action}', 'load details'));
     } finally {
       setDetailsLoading(false);
     }
@@ -118,30 +120,30 @@ export default function IdeaDetailsPage() {
 
         if (error) throw error;
         setIsSaved(false);
-        toast.success('Removed from saved ideas');
+        toast.success(t('toast.ideaUnsaved'));
       } else {
-        const { error } = await supabase
+        const { error} = await supabase
           .from('saved_ideas')
           .insert({ user_id: user.id, idea_id: ideaId });
 
         if (error) throw error;
         setIsSaved(true);
-        toast.success('Added to saved ideas');
+        toast.success(t('toast.ideaSaved'));
       }
     } catch (error) {
       console.error('Error toggling save:', error);
-      toast.error('Failed to update saved status');
+      toast.error(t('toast.failed').replace('{action}', 'update status'));
     }
   };
 
   const handleShare = async () => {
-    const shareText = `${idea?.title}\n\n${idea?.description}\n\nCheck out this app idea on Ideator!`;
+    const shareText = `${idea?.title}\n\n${idea?.description}\n\n${t('ideaDetail.shareText')}`;
 
     try {
       await navigator.clipboard.writeText(shareText);
-      toast.success('Copied to clipboard!');
+      toast.success(t('toast.copiedToClipboard'));
     } catch (error) {
-      toast.error('Failed to copy to clipboard');
+      toast.error(t('toast.failed').replace('{action}', 'copy'));
     }
   };
 
@@ -149,10 +151,10 @@ export default function IdeaDetailsPage() {
     if (!idea) return;
     try {
       exportIdeaToPDF(idea);
-      toast.success('PDF exported successfully!');
+      toast.success(t('toast.pdfExported'));
     } catch (error) {
       console.error('Error exporting PDF:', error);
-      toast.error('Failed to export PDF');
+      toast.error(t('toast.failed').replace('{action}', 'export PDF'));
     }
   };
 
@@ -179,7 +181,7 @@ export default function IdeaDetailsPage() {
             className="mb-4"
           >
             <ArrowLeft className="mr-2 h-4 w-4" />
-            Back
+            {t('common.back')}
           </Button>
 
           <div className="flex justify-between items-start gap-4">
@@ -238,7 +240,7 @@ export default function IdeaDetailsPage() {
         {/* Description */}
         <Card className="mb-6">
           <CardHeader>
-            <CardTitle>Description</CardTitle>
+            <CardTitle>{t('ideaDetail.description')}</CardTitle>
           </CardHeader>
           <CardContent>
             <p className="text-lg text-gray-700 leading-relaxed">{idea.description}</p>
@@ -247,13 +249,13 @@ export default function IdeaDetailsPage() {
               <div className="mt-4 pt-4 border-t border-gray-200 space-y-2">
                 {idea.monetization && (
                   <div className="text-gray-700">
-                    <span className="font-medium text-gray-900">Monetization:</span>{' '}
+                    <span className="font-medium text-gray-900">{t('ideaDetail.monetization')}:</span>{' '}
                     <span>{idea.monetization}</span>
                   </div>
                 )}
                 {idea.target_audience && (
                   <div className="text-gray-700">
-                    <span className="font-medium text-gray-900">Target Audience:</span>{' '}
+                    <span className="font-medium text-gray-900">{t('ideaDetail.targetAudience')}:</span>{' '}
                     <span>{idea.target_audience}</span>
                   </div>
                 )}
@@ -272,9 +274,9 @@ export default function IdeaDetailsPage() {
             {details.implementation_steps && (
               <Card className="mb-6">
                 <CardHeader>
-                  <CardTitle>Implementation Steps</CardTitle>
+                  <CardTitle>{t('ideaDetail.implementationSteps')}</CardTitle>
                   <CardDescription>
-                    Follow these steps to build your app
+                    {t('ideaDetail.implementationStepsDesc')}
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
@@ -296,9 +298,9 @@ export default function IdeaDetailsPage() {
             {details.tech_stack && (
               <Card className="mb-6">
                 <CardHeader>
-                  <CardTitle>Recommended Tech Stack</CardTitle>
+                  <CardTitle>{t('ideaDetail.techStack')}</CardTitle>
                   <CardDescription>
-                    Technologies and tools to use
+                    {t('ideaDetail.techStackDesc')}
                   </CardDescription>
                 </CardHeader>
                 <CardContent>
@@ -320,9 +322,9 @@ export default function IdeaDetailsPage() {
             {details.suggestions && (
               <Card>
                 <CardHeader>
-                  <CardTitle>Additional Suggestions</CardTitle>
+                  <CardTitle>{t('ideaDetail.suggestions')}</CardTitle>
                   <CardDescription>
-                    Tips and considerations for your project
+                    {t('ideaDetail.suggestionsDesc')}
                   </CardDescription>
                 </CardHeader>
                 <CardContent>

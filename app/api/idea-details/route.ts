@@ -14,7 +14,7 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json();
-    const { ideaId } = body;
+    const { ideaId, language = 'en' } = body;
 
     if (!ideaId) {
       return NextResponse.json({ error: 'Idea ID required' }, { status: 400 });
@@ -41,8 +41,33 @@ export async function POST(request: NextRequest) {
       });
     }
 
-    // Generate detailed information with Gemini
-    const prompt = `You are an expert product manager and software architect. Provide detailed implementation guidance for the following app idea:
+    // Generate detailed information with Gemini in selected language
+    let prompt = '';
+
+    if (language === 'tr') {
+      prompt = `Sen bir uzman ürün yöneticisi ve yazılım mimarısın. Aşağıdaki uygulama fikri için detaylı uygulama rehberi sağla:
+
+Başlık: ${idea.title}
+Açıklama: ${idea.description}
+${idea.technology ? `Teknoloji/Platform: ${idea.technology}` : ''}
+${idea.complexity ? `Karmaşıklık Seviyesi: ${idea.complexity}` : ''}
+${idea.time_to_build ? `Yapım Süresi: ${idea.time_to_build}` : ''}
+${idea.monetization ? `Gelir Modeli: ${idea.monetization}` : ''}
+${idea.target_audience ? `Hedef Kitle: ${idea.target_audience}` : ''}
+
+Aşağıdakileri JSON formatında sağla:
+1. implementation_steps: Bu uygulamayı oluşturmak için 5-8 detaylı adım dizisi (her adım 1-2 cümle olmalı)
+2. tech_stack: Önerilen teknolojiler, framework'ler ve araçlar dizisi (5-10 öğe)
+3. suggestions: Bu uygulamayı oluşturmak için 3-5 ek öneri veya dikkat edilmesi gereken noktalar dizisi
+
+SADECE bu üç alan içeren geçerli bir JSON nesnesi döndür. Örnek format:
+{
+  "implementation_steps": ["Adım 1 açıklaması...", "Adım 2 açıklaması..."],
+  "tech_stack": ["Teknoloji 1", "Teknoloji 2"],
+  "suggestions": ["Öneri 1", "Öneri 2"]
+}`;
+    } else {
+      prompt = `You are an expert product manager and software architect. Provide detailed implementation guidance for the following app idea:
 
 Title: ${idea.title}
 Description: ${idea.description}
@@ -63,6 +88,7 @@ Return ONLY a valid JSON object with these three fields. Example format:
   "tech_stack": ["Technology 1", "Technology 2"],
   "suggestions": ["Suggestion 1", "Suggestion 2"]
 }`;
+    }
 
     // Using Gemini 2.5 Flash - the latest model (1.5 models are retired)
     const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' });

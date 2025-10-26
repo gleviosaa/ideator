@@ -213,6 +213,14 @@ const translations = {
       saveIdea: 'Save Idea',
       unsaveIdea: 'Unsave Idea',
       viewDetails: 'View Details',
+      description: 'Description',
+      implementationSteps: 'Implementation Steps',
+      implementationStepsDesc: 'Follow these steps to build your app',
+      techStack: 'Recommended Tech Stack',
+      techStackDesc: 'Technologies and tools to use',
+      suggestions: 'Additional Suggestions',
+      suggestionsDesc: 'Tips and considerations for your project',
+      shareText: 'Check out this app idea on Ideator!',
     },
 
     // Toast messages
@@ -233,6 +241,8 @@ const translations = {
       passwordsNoMatch: 'Passwords do not match',
       passwordTooShort: 'Password must be at least 6 characters',
       failed: 'Failed to {action}. Please try again.',
+      copiedToClipboard: 'Copied to clipboard!',
+      pdfExported: 'PDF exported successfully!',
     },
     // Confirm Modal
     confirmModal: {
@@ -406,6 +416,14 @@ const translations = {
       saveIdea: 'Fikri Kaydet',
       unsaveIdea: 'Kaydı Kaldır',
       viewDetails: 'Detayları Gör',
+      description: 'Açıklama',
+      implementationSteps: 'Uygulama Adımları',
+      implementationStepsDesc: 'Uygulamanızı oluşturmak için bu adımları izleyin',
+      techStack: 'Önerilen Teknoloji Yığını',
+      techStackDesc: 'Kullanılacak teknolojiler ve araçlar',
+      suggestions: 'Ek Öneriler',
+      suggestionsDesc: 'Projeniz için ipuçları ve dikkat edilmesi gerekenler',
+      shareText: 'Ideator\'da bu uygulama fikrine göz atın!',
     },
 
     // Toast messages
@@ -426,6 +444,8 @@ const translations = {
       passwordsNoMatch: 'Şifreler eşleşmiyor',
       passwordTooShort: 'Şifre en az 6 karakter olmalıdır',
       failed: '{action} başarısız oldu. Lütfen tekrar deneyin.',
+      copiedToClipboard: 'Panoya kopyalandı!',
+      pdfExported: 'PDF başarıyla dışa aktarıldı!',
     },
     // Confirm Modal
     confirmModal: {
