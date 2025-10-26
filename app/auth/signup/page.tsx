@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
 import { IdeatorLogo } from '@/components/IdeatorLogo'
+import { useLanguage } from '@/contexts/LanguageContext'
 import toast from 'react-hot-toast'
 
 export const dynamic = 'force-dynamic'
@@ -19,17 +20,18 @@ export default function SignupPage() {
   const [loading, setLoading] = useState(false)
   const router = useRouter()
   const supabase = createClient()
+  const { t } = useLanguage()
 
   const handleSignup = async (e: React.FormEvent) => {
     e.preventDefault()
 
     if (password !== confirmPassword) {
-      toast.error('Passwords do not match')
+      toast.error(t('toast.passwordsNoMatch'))
       return
     }
 
     if (password.length < 6) {
-      toast.error('Password must be at least 6 characters')
+      toast.error(t('toast.passwordTooShort'))
       return
     }
 
@@ -47,11 +49,11 @@ export default function SignupPage() {
       if (error) {
         toast.error(error.message)
       } else {
-        toast.success('Account created! Please check your email to verify.')
+        toast.success(t('toast.accountCreated'))
         router.push('/auth/login')
       }
     } catch (error) {
-      toast.error('An unexpected error occurred')
+      toast.error(t('toast.failed').replace('{action}', 'signup'))
     } finally {
       setLoading(false)
     }
@@ -64,16 +66,16 @@ export default function SignupPage() {
           <div className="flex justify-center">
             <IdeatorLogo size="lg" />
           </div>
-          <CardTitle className="text-2xl font-bold text-center">Create an account</CardTitle>
+          <CardTitle className="text-2xl font-bold text-center">{t('auth.createAccount')}</CardTitle>
           <CardDescription>
-            Enter your information to get started
+            {t('auth.enterInfo')}
           </CardDescription>
         </CardHeader>
         <form onSubmit={handleSignup}>
           <CardContent className="space-y-4">
             <div className="space-y-2">
               <label htmlFor="email" className="text-sm font-medium">
-                Email
+                {t('auth.email')}
               </label>
               <Input
                 id="email"
@@ -87,7 +89,7 @@ export default function SignupPage() {
             </div>
             <div className="space-y-2">
               <label htmlFor="password" className="text-sm font-medium">
-                Password
+                {t('auth.password')}
               </label>
               <Input
                 id="password"
@@ -101,7 +103,7 @@ export default function SignupPage() {
             </div>
             <div className="space-y-2">
               <label htmlFor="confirm-password" className="text-sm font-medium">
-                Confirm Password
+                {t('auth.confirmPassword')}
               </label>
               <Input
                 id="confirm-password"
@@ -116,12 +118,12 @@ export default function SignupPage() {
           </CardContent>
           <CardFooter className="flex flex-col space-y-4">
             <Button type="submit" className="w-full" disabled={loading}>
-              {loading ? 'Creating account...' : 'Sign up'}
+              {loading ? t('auth.creatingAccount') : t('auth.signup')}
             </Button>
             <p className="text-center text-sm text-gray-600">
-              Already have an account?{' '}
+              {t('auth.alreadyHaveAccount')}{' '}
               <Link href="/auth/login" className="text-black font-medium hover:underline">
-                Login
+                {t('auth.login')}
               </Link>
             </p>
           </CardFooter>

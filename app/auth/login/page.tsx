@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
 import { IdeatorLogo } from '@/components/IdeatorLogo'
+import { useLanguage } from '@/contexts/LanguageContext'
 import toast from 'react-hot-toast'
 
 export const dynamic = 'force-dynamic'
@@ -18,6 +19,7 @@ export default function LoginPage() {
   const [loading, setLoading] = useState(false)
   const router = useRouter()
   const supabase = createClient()
+  const { t } = useLanguage()
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -32,12 +34,12 @@ export default function LoginPage() {
       if (error) {
         toast.error(error.message)
       } else {
-        toast.success('Logged in successfully!')
+        toast.success(t('toast.loggedIn'))
         router.push('/dashboard')
         router.refresh()
       }
     } catch (error) {
-      toast.error('An unexpected error occurred')
+      toast.error(t('toast.failed').replace('{action}', 'login'))
     } finally {
       setLoading(false)
     }
@@ -50,16 +52,16 @@ export default function LoginPage() {
           <div className="flex justify-center">
             <IdeatorLogo size="lg" />
           </div>
-          <CardTitle className="text-2xl font-bold text-center">Login</CardTitle>
+          <CardTitle className="text-2xl font-bold text-center">{t('auth.login')}</CardTitle>
           <CardDescription>
-            Enter your email and password to access your account
+            {t('auth.enterEmail')}
           </CardDescription>
         </CardHeader>
         <form onSubmit={handleLogin}>
           <CardContent className="space-y-4">
             <div className="space-y-2">
               <label htmlFor="email" className="text-sm font-medium">
-                Email
+                {t('auth.email')}
               </label>
               <Input
                 id="email"
@@ -73,7 +75,7 @@ export default function LoginPage() {
             </div>
             <div className="space-y-2">
               <label htmlFor="password" className="text-sm font-medium">
-                Password
+                {t('auth.password')}
               </label>
               <Input
                 id="password"
@@ -88,12 +90,12 @@ export default function LoginPage() {
           </CardContent>
           <CardFooter className="flex flex-col space-y-4">
             <Button type="submit" className="w-full" disabled={loading}>
-              {loading ? 'Logging in...' : 'Login'}
+              {loading ? t('auth.loggingIn') : t('auth.login')}
             </Button>
             <p className="text-center text-sm text-gray-600">
-              Don&apos;t have an account?{' '}
+              {t('auth.dontHaveAccount')}{' '}
               <Link href="/auth/signup" className="text-black font-medium hover:underline">
-                Sign up
+                {t('auth.signup')}
               </Link>
             </p>
           </CardFooter>
