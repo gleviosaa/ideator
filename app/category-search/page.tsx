@@ -11,6 +11,8 @@ import { SearchConfirmationModal } from '@/components/SearchConfirmationModal';
 import { HamburgerMenu } from '@/components/HamburgerMenu';
 import { IdeatorLogo } from '@/components/IdeatorLogo';
 import { CATEGORIES, CategoryFilters } from '@/types';
+import { useLanguage } from '@/contexts/LanguageContext';
+import { getCategoriesInLanguage } from '@/lib/categories-i18n';
 import toast from 'react-hot-toast';
 
 export const dynamic = 'force-dynamic'
@@ -35,6 +37,10 @@ export default function CategorySearchPage() {
   });
   const router = useRouter();
   const supabase = createClient();
+  const { t, language } = useLanguage();
+
+  // Get categories in current language
+  const localizedCategories = getCategoriesInLanguage(language);
 
   const handleCategorySelect = (category: keyof CategoryFilters, value: string) => {
     setFilters(prev => ({
@@ -76,7 +82,7 @@ export default function CategorySearchPage() {
         ...prev,
         [category]: false,
       }));
-      toast.success(`Added custom ${category}: ${customValue}`);
+      toast.success(t('toast.customAdded').replace('{category}', category).replace('{value}', customValue));
     }
   };
 
@@ -110,10 +116,10 @@ export default function CategorySearchPage() {
       // Store ideas in sessionStorage to pass to dashboard
       sessionStorage.setItem('generatedIdeas', JSON.stringify(data.ideas));
 
-      toast.success('Ideas generated!');
+      toast.success(t('toast.ideasGenerated'));
       router.push('/dashboard');
     } catch (error) {
-      toast.error('Failed to generate ideas. Please try again.');
+      toast.error(t('toast.failed').replace('{action}', 'generate ideas'));
     } finally {
       setLoading(false);
     }
@@ -166,18 +172,18 @@ export default function CategorySearchPage() {
       <div className="max-w-5xl mx-auto">
         <div className="text-center space-y-3 py-4 mb-6">
           <h2 className="text-2xl md:text-3xl font-bold text-black leading-tight">
-            Select your preferences
+            {t('categorySearch.selectPreferences')}
           </h2>
           <p className="text-base text-gray-600 max-w-2xl mx-auto">
-            Choose at least one option from any category to get personalized app ideas
+            {t('categorySearch.subtitle')}
           </p>
         </div>
 
         <Card>
           <CardHeader>
-            <CardTitle>Filter Options</CardTitle>
+            <CardTitle>{t('categorySearch.filterOptions')}</CardTitle>
             <p className="text-sm text-gray-600 mt-2">
-              Select at least one option from any category below to generate ideas
+              {t('categorySearch.helperText')}
             </p>
           </CardHeader>
           <CardContent className="space-y-3">
@@ -189,10 +195,10 @@ export default function CategorySearchPage() {
                 disabled={loading}
               >
                 <div className="flex items-center gap-2">
-                  <h3 className="font-semibold text-black">Technology/Platform</h3>
+                  <h3 className="font-semibold text-black">{t('categories.technology')}</h3>
                   {filters.technology && (
                     <span className="text-xs px-2 py-0.5 bg-black text-white rounded-full">
-                      Selected
+                      {t('categorySearch.selected')}
                     </span>
                   )}
                 </div>
@@ -205,7 +211,7 @@ export default function CategorySearchPage() {
               {openCategory === 'technology' && (
                 <div className="px-4 pb-4 pt-2 border-t border-gray-100">
                   <div className="flex flex-wrap gap-2 mb-2">
-                    {CATEGORIES.technology.map((tech) => (
+                    {localizedCategories.technology.map((tech) => (
                       <Button
                         key={tech}
                         variant={filters.technology === tech ? 'default' : 'outline'}
@@ -216,7 +222,7 @@ export default function CategorySearchPage() {
                         {tech}
                       </Button>
                     ))}
-                    {filters.technology && !CATEGORIES.technology.includes(filters.technology) && (
+                    {filters.technology && !localizedCategories.technology.includes(filters.technology) && (
                       <Button
                         variant="default"
                         size="sm"
@@ -234,7 +240,7 @@ export default function CategorySearchPage() {
                     className="text-gray-600 hover:text-black mt-2"
                   >
                     <Plus className="h-4 w-4 mr-1" />
-                    Add Custom
+                    {t('categorySearch.addCustom')}
                   </Button>
                   {showCustomInput.technology && (
                     <div className="flex gap-2 mt-3">
@@ -263,10 +269,10 @@ export default function CategorySearchPage() {
                 disabled={loading}
               >
                 <div className="flex items-center gap-2">
-                  <h3 className="font-semibold text-black">Context</h3>
+                  <h3 className="font-semibold text-black">{t('categories.context')}</h3>
                   {filters.context && (
                     <span className="text-xs px-2 py-0.5 bg-black text-white rounded-full">
-                      Selected
+                      {t('categorySearch.selected')}
                     </span>
                   )}
                 </div>
@@ -279,7 +285,7 @@ export default function CategorySearchPage() {
               {openCategory === 'context' && (
                 <div className="px-4 pb-4 pt-2 border-t border-gray-100">
                   <div className="flex flex-wrap gap-2 mb-2">
-                    {CATEGORIES.context.map((ctx) => (
+                    {localizedCategories.context.map((ctx) => (
                       <Button
                         key={ctx}
                         variant={filters.context === ctx ? 'default' : 'outline'}
@@ -290,7 +296,7 @@ export default function CategorySearchPage() {
                         {ctx}
                       </Button>
                     ))}
-                    {filters.context && !CATEGORIES.context.includes(filters.context) && (
+                    {filters.context && !localizedCategories.context.includes(filters.context) && (
                       <Button
                         variant="default"
                         size="sm"
@@ -308,7 +314,7 @@ export default function CategorySearchPage() {
                     className="text-gray-600 hover:text-black mt-2"
                   >
                     <Plus className="h-4 w-4 mr-1" />
-                    Add Custom
+                    {t('categorySearch.addCustom')}
                   </Button>
                   {showCustomInput.context && (
                     <div className="flex gap-2 mt-3">
@@ -337,10 +343,10 @@ export default function CategorySearchPage() {
                 disabled={loading}
               >
                 <div className="flex items-center gap-2">
-                  <h3 className="font-semibold text-black">Monetization</h3>
+                  <h3 className="font-semibold text-black">{t('categories.monetization')}</h3>
                   {filters.monetization && (
                     <span className="text-xs px-2 py-0.5 bg-black text-white rounded-full">
-                      Selected
+                      {t('categorySearch.selected')}
                     </span>
                   )}
                 </div>
@@ -353,7 +359,7 @@ export default function CategorySearchPage() {
               {openCategory === 'monetization' && (
                 <div className="px-4 pb-4 pt-2 border-t border-gray-100">
                   <div className="flex flex-wrap gap-2 mb-2">
-                    {CATEGORIES.monetization.map((model) => (
+                    {localizedCategories.monetization.map((model) => (
                       <Button
                         key={model}
                         variant={filters.monetization === model ? 'default' : 'outline'}
@@ -364,7 +370,7 @@ export default function CategorySearchPage() {
                         {model}
                       </Button>
                     ))}
-                    {filters.monetization && !CATEGORIES.monetization.includes(filters.monetization) && (
+                    {filters.monetization && !localizedCategories.monetization.includes(filters.monetization) && (
                       <Button
                         variant="default"
                         size="sm"
@@ -382,7 +388,7 @@ export default function CategorySearchPage() {
                     className="text-gray-600 hover:text-black mt-2"
                   >
                     <Plus className="h-4 w-4 mr-1" />
-                    Add Custom
+                    {t('categorySearch.addCustom')}
                   </Button>
                   {showCustomInput.monetization && (
                     <div className="flex gap-2 mt-3">
@@ -411,10 +417,10 @@ export default function CategorySearchPage() {
                 disabled={loading}
               >
                 <div className="flex items-center gap-2">
-                  <h3 className="font-semibold text-black">Target Audience</h3>
+                  <h3 className="font-semibold text-black">{t('categories.targetAudience')}</h3>
                   {filters.targetAudience && (
                     <span className="text-xs px-2 py-0.5 bg-black text-white rounded-full">
-                      Selected
+                      {t('categorySearch.selected')}
                     </span>
                   )}
                 </div>
@@ -427,7 +433,7 @@ export default function CategorySearchPage() {
               {openCategory === 'targetAudience' && (
                 <div className="px-4 pb-4 pt-2 border-t border-gray-100">
                   <div className="flex flex-wrap gap-2 mb-2">
-                    {CATEGORIES.targetAudience.map((audience) => (
+                    {localizedCategories.targetAudience.map((audience) => (
                       <Button
                         key={audience}
                         variant={filters.targetAudience === audience ? 'default' : 'outline'}
@@ -438,7 +444,7 @@ export default function CategorySearchPage() {
                         {audience}
                       </Button>
                     ))}
-                    {filters.targetAudience && !CATEGORIES.targetAudience.includes(filters.targetAudience) && (
+                    {filters.targetAudience && !localizedCategories.targetAudience.includes(filters.targetAudience) && (
                       <Button
                         variant="default"
                         size="sm"
@@ -456,7 +462,7 @@ export default function CategorySearchPage() {
                     className="text-gray-600 hover:text-black mt-2"
                   >
                     <Plus className="h-4 w-4 mr-1" />
-                    Add Custom
+                    {t('categorySearch.addCustom')}
                   </Button>
                   {showCustomInput.targetAudience && (
                     <div className="flex gap-2 mt-3">
@@ -479,17 +485,17 @@ export default function CategorySearchPage() {
 
             {/* Additional Comments */}
             <div className="pt-3">
-              <h3 className="font-medium mb-3">Additional Comments <span className="text-gray-500 font-normal text-sm">(Optional)</span></h3>
+              <h3 className="font-medium mb-3">{t('categorySearch.additionalComments')} <span className="text-gray-500 font-normal text-sm">({t('common.add')})</span></h3>
               <Input
                 type="text"
-                placeholder="Add any specific requirements, features, or details you'd like to include..."
+                placeholder={t('categorySearch.additionalCommentsPlaceholder')}
                 value={additionalComments}
                 onChange={(e) => setAdditionalComments(e.target.value)}
                 disabled={loading}
                 className="w-full"
               />
               <p className="text-sm text-gray-600 mt-2">
-                Provide additional context to refine your app ideas
+                {t('categorySearch.additionalCommentsHelper')}
               </p>
             </div>
 
@@ -499,7 +505,7 @@ export default function CategorySearchPage() {
               onClick={handleSubmit}
               disabled={loading || !hasFilters}
             >
-              {loading ? 'Generating Ideas...' : 'Generate Ideas'}
+              {loading ? t('categorySearch.generatingIdeas') : t('categorySearch.generateIdeas')}
             </Button>
           </CardContent>
         </Card>
@@ -514,9 +520,9 @@ export default function CategorySearchPage() {
                 <div className="w-16 h-16 border-4 border-gray-200 border-t-black rounded-full animate-spin"></div>
               </div>
               <div className="text-center space-y-2">
-                <h3 className="text-xl font-semibold text-black">Generating Ideas...</h3>
+                <h3 className="text-xl font-semibold text-black">{t('categorySearch.generatingIdeas')}</h3>
                 <p className="text-gray-600">
-                  Our AI is crafting personalized app ideas just for you. This may take a few moments.
+                  {t('dashboard.generatingMessage')}
                 </p>
               </div>
             </div>
