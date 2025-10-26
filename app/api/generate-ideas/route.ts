@@ -23,32 +23,74 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json();
-    const { query, filters, mode, additionalComments } = body;
+    const { query, filters, mode, additionalComments, language = 'en' } = body;
 
     if (!query && !filters) {
       return NextResponse.json({ error: 'Query or filters required' }, { status: 400 });
     }
 
-    // Build the prompt for Gemini
-    let prompt = `You are an expert product manager and startup advisor. Generate 10 unique and innovative app ideas based on the following criteria:\n\n`;
+    // Build the prompt for Gemini in the selected language
+    let prompt = '';
 
-    if (mode === 'free_text' && query) {
-      prompt += `User's description: ${query}\n\n`;
-    }
+    if (language === 'tr') {
+      prompt = `Sen bir uzman ürün yöneticisi ve startup danışmanısın. Aşağıdaki kriterlere göre 10 benzersiz ve yenilikçi uygulama fikri üret:\n\n`;
 
-    if (filters) {
-      prompt += `Filters:\n`;
-      if (filters.technology) prompt += `- Technology/Platform: ${filters.technology}\n`;
-      if (filters.context) prompt += `- Context/Category: ${filters.context}\n`;
-      if (filters.monetization) prompt += `- Monetization: ${filters.monetization}\n`;
-      if (filters.targetAudience) prompt += `- Target Audience: ${filters.targetAudience}\n`;
-    }
+      if (mode === 'free_text' && query) {
+        prompt += `Kullanıcının açıklaması: ${query}\n\n`;
+      }
 
-    if (additionalComments) {
-      prompt += `\nAdditional Requirements/Comments: ${additionalComments}\n`;
-    }
+      if (filters) {
+        prompt += `Filtreler:\n`;
+        if (filters.technology) prompt += `- Teknoloji/Platform: ${filters.technology}\n`;
+        if (filters.context) prompt += `- Bağlam/Kategori: ${filters.context}\n`;
+        if (filters.monetization) prompt += `- Gelir Modeli: ${filters.monetization}\n`;
+        if (filters.targetAudience) prompt += `- Hedef Kitle: ${filters.targetAudience}\n`;
+      }
 
-    prompt += `\nFor each idea, provide:
+      if (additionalComments) {
+        prompt += `\nEk Gereksinimler/Yorumlar: ${additionalComments}\n`;
+      }
+
+      prompt += `\nHer fikir için şunları sağla:
+1. Akılda kalıcı bir başlık (maksimum 60 karakter)
+2. Kısa bir açıklama (2-3 cümle, maksimum 150 karakter)
+
+Yanıtı tam olarak 10 nesne içeren geçerli bir JSON dizisi olarak döndür, her biri 'title' ve 'description' alanlarına sahip olsun.
+Örnek format:
+[
+  {
+    "title": "Örnek Uygulama Fikri",
+    "description": "Uygulamanın temel konseptini ve değer önerisini açıklayan kısa bir açıklama."
+  }
+]
+
+Fikirlerin şu özelliklere sahip olduğundan emin ol:
+- Pratik ve uygulanabilir
+- Yenilikçi ama gerçekçi
+- Güncel pazar trendleriyle uyumlu
+- Kullanıcılar için değerli
+
+SADECE JSON dizisini döndür, ek metin veya biçimlendirme ekleme.`;
+    } else {
+      prompt = `You are an expert product manager and startup advisor. Generate 10 unique and innovative app ideas based on the following criteria:\n\n`;
+
+      if (mode === 'free_text' && query) {
+        prompt += `User's description: ${query}\n\n`;
+      }
+
+      if (filters) {
+        prompt += `Filters:\n`;
+        if (filters.technology) prompt += `- Technology/Platform: ${filters.technology}\n`;
+        if (filters.context) prompt += `- Context/Category: ${filters.context}\n`;
+        if (filters.monetization) prompt += `- Monetization: ${filters.monetization}\n`;
+        if (filters.targetAudience) prompt += `- Target Audience: ${filters.targetAudience}\n`;
+      }
+
+      if (additionalComments) {
+        prompt += `\nAdditional Requirements/Comments: ${additionalComments}\n`;
+      }
+
+      prompt += `\nFor each idea, provide:
 1. A catchy title (max 60 characters)
 2. A brief description (2-3 sentences, max 150 characters)
 
@@ -68,6 +110,7 @@ Make sure the ideas are:
 - Valuable to users
 
 Return ONLY the JSON array, no additional text or formatting.`;
+    }
 
     // Call Gemini API
     let text;

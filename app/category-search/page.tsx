@@ -100,7 +100,8 @@ export default function CategorySearchPage() {
         body: JSON.stringify({
           filters,
           mode: 'category_select',
-          additionalComments: additionalComments.trim() || undefined
+          additionalComments: additionalComments.trim() || undefined,
+          language
         }),
       });
 

@@ -3,6 +3,7 @@
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { X } from 'lucide-react';
+import { useLanguage } from '@/contexts/LanguageContext';
 
 interface SearchConfirmationModalProps {
   isOpen: boolean;
@@ -23,24 +24,26 @@ export function SearchConfirmationModal({
   filters,
   additionalComments,
 }: SearchConfirmationModalProps) {
+  const { t } = useLanguage();
+
   if (!isOpen) return null;
 
   const buildSummary = () => {
     const parts: string[] = [];
 
     if (searchMode === 'free_text' && query) {
-      parts.push(`Search Query: "${query}"`);
+      parts.push(`${t('confirmModal.searchQuery')}: "${query}"`);
     }
 
     if (filters) {
-      if (filters.technology) parts.push(`Technology: ${filters.technology}`);
-      if (filters.context) parts.push(`Category: ${filters.context}`);
-      if (filters.monetization) parts.push(`Monetization: ${filters.monetization}`);
-      if (filters.targetAudience) parts.push(`Target Audience: ${filters.targetAudience}`);
+      if (filters.technology) parts.push(`${t('confirmModal.technology')}: ${filters.technology}`);
+      if (filters.context) parts.push(`${t('confirmModal.category')}: ${filters.context}`);
+      if (filters.monetization) parts.push(`${t('confirmModal.monetization')}: ${filters.monetization}`);
+      if (filters.targetAudience) parts.push(`${t('confirmModal.targetAudience')}: ${filters.targetAudience}`);
     }
 
     if (additionalComments) {
-      parts.push(`Additional Comments: "${additionalComments}"`);
+      parts.push(`${t('confirmModal.additionalComments')}: "${additionalComments}"`);
     }
 
     return parts;
@@ -53,7 +56,7 @@ export function SearchConfirmationModal({
       <Card className="w-full max-w-2xl shadow-uber-xl">
         <CardHeader>
           <div className="flex justify-between items-start">
-            <CardTitle className="text-2xl">Confirm Your Search</CardTitle>
+            <CardTitle className="text-2xl">{t('confirmModal.title')}</CardTitle>
             <Button
               variant="ghost"
               size="icon"
@@ -64,13 +67,13 @@ export function SearchConfirmationModal({
             </Button>
           </div>
           <p className="text-sm text-gray-600 mt-2">
-            Review your search criteria before generating ideas
+            {t('confirmModal.subtitle')}
           </p>
         </CardHeader>
         <CardContent className="space-y-6">
           {/* Summary */}
           <div className="bg-gray-50 rounded-uber-lg p-4 space-y-3">
-            <h3 className="font-semibold text-black mb-3">Search Summary:</h3>
+            <h3 className="font-semibold text-black mb-3">{t('confirmModal.searchSummary')}:</h3>
             {summaryParts.length > 0 ? (
               <div className="space-y-2">
                 {summaryParts.map((part, index) => (
@@ -81,14 +84,14 @@ export function SearchConfirmationModal({
                 ))}
               </div>
             ) : (
-              <p className="text-gray-500 italic">No search criteria provided</p>
+              <p className="text-gray-500 italic">{t('confirmModal.noCriteria')}</p>
             )}
           </div>
 
           {/* Prompt Preview */}
           <div className="border-t border-gray-200 pt-4">
             <p className="text-sm text-gray-600">
-              This information will be used to generate 10 personalized app ideas using AI.
+              {t('confirmModal.promptPreview')}
             </p>
           </div>
 
@@ -100,14 +103,14 @@ export function SearchConfirmationModal({
               onClick={onClose}
               className="flex-1"
             >
-              Edit Search
+              {t('confirmModal.editSearch')}
             </Button>
             <Button
               size="lg"
               onClick={onConfirm}
               className="flex-1"
             >
-              Confirm & Generate Ideas
+              {t('confirmModal.confirmButton')}
             </Button>
           </div>
         </CardContent>

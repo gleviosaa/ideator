@@ -28,7 +28,7 @@ export default function DashboardPage() {
   const [pendingQuery, setPendingQuery] = useState<string>('');
   const router = useRouter();
   const supabase = createClient();
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
 
   // Check for generated ideas from category search page
   useEffect(() => {
@@ -54,7 +54,7 @@ export default function DashboardPage() {
       const response = await fetch('/api/generate-ideas', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ query: pendingQuery, mode: 'free_text' }),
+        body: JSON.stringify({ query: pendingQuery, mode: 'free_text', language }),
       });
 
       if (!response.ok) {

@@ -234,6 +234,22 @@ const translations = {
       passwordTooShort: 'Password must be at least 6 characters',
       failed: 'Failed to {action}. Please try again.',
     },
+    // Confirm Modal
+    confirmModal: {
+      title: 'Confirm Your Search',
+      subtitle: 'Review your search criteria before generating ideas',
+      searchSummary: 'Search Summary',
+      searchQuery: 'Search Query',
+      technology: 'Technology',
+      category: 'Category',
+      monetization: 'Monetization',
+      targetAudience: 'Target Audience',
+      additionalComments: 'Additional Comments',
+      noCriteria: 'No search criteria provided',
+      promptPreview: 'This information will be used to generate 10 personalized app ideas using AI.',
+      editSearch: 'Edit Search',
+      confirmButton: 'Confirm & Generate Ideas',
+    },
   },
 
   tr: {
@@ -410,6 +426,22 @@ const translations = {
       passwordsNoMatch: 'Şifreler eşleşmiyor',
       passwordTooShort: 'Şifre en az 6 karakter olmalıdır',
       failed: '{action} başarısız oldu. Lütfen tekrar deneyin.',
+    },
+    // Confirm Modal
+    confirmModal: {
+      title: 'Aramanızı Onaylayın',
+      subtitle: 'Fikir üretmeden önce arama kriterlerinizi gözden geçirin',
+      searchSummary: 'Arama Özeti',
+      searchQuery: 'Arama Sorgusu',
+      technology: 'Teknoloji',
+      category: 'Kategori',
+      monetization: 'Gelir Modeli',
+      targetAudience: 'Hedef Kitle',
+      additionalComments: 'Ek Yorumlar',
+      noCriteria: 'Arama kriteri sağlanmadı',
+      promptPreview: 'Bu bilgiler yapay zeka kullanılarak 10 kişiselleştirilmiş uygulama fikri üretmek için kullanılacak.',
+      editSearch: 'Aramayı Düzenle',
+      confirmButton: 'Onayla ve Fikir Üret',
     },
   },
 };
